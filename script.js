@@ -1,4 +1,3 @@
-
 let items = [];
 let headers;
 let skuIndex;
@@ -12,8 +11,8 @@ fetch('Resources.csv')
         items = csvData.split('\n').filter(row => row.length > 0).map(row => row.split(','));
         headers = items[0];
         skuIndex = headers.indexOf('SKU');
-        categoryIndex = headers.indexOf('Category'); // Get the index of the 'Category' column
-        subcategoryIndex = headers.indexOf('Subcategory'); // Get the index of the 'Subcategory' column
+        categoryIndex = headers.indexOf('Category');
+        subcategoryIndex = headers.indexOf('Subcategory');
 
         const categories = new Set(items.slice(1).map(item => item[categoryIndex]));
         const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex]));
@@ -25,7 +24,6 @@ fetch('Resources.csv')
         categorySelect.addEventListener('change', displayGallery);
         subcategorySelect.addEventListener('change', displayGallery);
 
-        // Create labels for the dropdowns
         const categoryLabel = document.createElement('label');
         categoryLabel.textContent = 'Category:';
         categoryLabel.htmlFor = 'categorySelect';
@@ -34,7 +32,6 @@ fetch('Resources.csv')
         subcategoryLabel.textContent = 'Subcategory:';
         subcategoryLabel.htmlFor = 'subcategorySelect';
 
-        // Insert labels and dropdowns
         galleryContainer.insertBefore(categoryLabel, galleryContainer.firstChild);
         galleryContainer.insertBefore(categorySelect, categoryLabel.nextSibling);
         galleryContainer.insertBefore(subcategoryLabel, categorySelect.nextSibling);
@@ -45,12 +42,10 @@ fetch('Resources.csv')
     })
     .catch(error => console.error('Error fetching CSV:', error));
 
-
 function createDropdown(id, options) {
     const select = document.createElement('select');
     select.id = id;
 
-    // Add an "All" option to the dropdown
     const allOption = document.createElement('option');
     allOption.value = 'All';
     allOption.textContent = 'All';
@@ -65,12 +60,11 @@ function createDropdown(id, options) {
 
     return select;
 }
-// Update displayGallery function
+
 function displayGallery() {
     const selectedCategory = document.getElementById('categorySelect').value;
     let selectedSubcategory = document.getElementById('subcategorySelect').value;
 
-    // Filter subcategories based on selected category
     let filteredSubcategories = new Set();
     if (selectedCategory !== 'All') {
         for (let i = 1; i < items.length; i++) {
@@ -82,7 +76,6 @@ function displayGallery() {
         filteredSubcategories = new Set(items.slice(1).map(item => item[subcategoryIndex]));
     }
 
-    // Update subcategory dropdown options
     const subcategorySelect = document.getElementById('subcategorySelect');
     subcategorySelect.innerHTML = '';
     subcategorySelect.appendChild(createOption('All'));
@@ -90,18 +83,15 @@ function displayGallery() {
         subcategorySelect.appendChild(createOption(subcategory));
     });
 
-    // Restore the selected subcategory
     if (Array.from(filteredSubcategories).includes(selectedSubcategory)) {
         subcategorySelect.value = selectedSubcategory;
     } else {
         selectedSubcategory = 'All';
     }
 
-    // Display gallery
     const gallery = document.getElementById('csvGallery');
     gallery.innerHTML = '';
     for (let i = 1; i < items.length; i++) {
-        // Display all items if "All" is selected, otherwise only display items that match the selected category and subcategory
         if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
             (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
             const div = createCard(items[i]);
@@ -110,7 +100,6 @@ function displayGallery() {
     }
 }
 
-// Create option for dropdown
 function createOption(value) {
     const option = document.createElement('option');
     option.value = value;
@@ -118,17 +107,15 @@ function createOption(value) {
     return option;
 }
 
-// Add reset button
 const resetButton = document.createElement('button');
 resetButton.textContent = 'Reset';
-resetButton.style.display = 'block'; // Add this line
+resetButton.style.display = 'block';
 resetButton.addEventListener('click', function() {
     document.getElementById('categorySelect').value = 'All';
     document.getElementById('subcategorySelect').value = 'All';
     displayGallery();
 });
 galleryContainer.insertBefore(resetButton, galleryContainer.firstChild);
-
 
 let timeout = null;
 
@@ -156,7 +143,7 @@ function liveSearch() {
 
     timeout = setTimeout(function () {
         input.value = '';
-    }, 1500); // Clear the input field 2 seconds after the user stops typing
+    }, 1500);
 }
 
 function createContentDiv(dataRowItems) {
@@ -185,40 +172,47 @@ function createContentDiv(dataRowItems) {
     return contentDiv;
 }
 
-
 function createCard(dataRowItems) {
     const div = document.createElement('div');
     div.classList.add('card');
     const itemKey = dataRowItems.join(',');
+
     if (selectedItems.has(itemKey)) {
         div.classList.add('selected');
     }
+
+    // Modal functionality
     div.addEventListener('click', function() {
-        toggleSelection(div, itemKey);
+        const img = div.querySelector('img');
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("img01");
+        const captionText = document.getElementById("caption");
+        
+        modal.style.display = "block";
+        modalImg.src = img.src;
+        captionText.innerHTML = img.alt;
     });
+
     const contentDiv = createContentDiv(dataRowItems);
     div.appendChild(contentDiv);
 
-    // Add quantity input
     const quantityInput = document.createElement('input');
     quantityInput.type = 'number';
     quantityInput.min = '1';
     quantityInput.max = '99';
     quantityInput.value = '1';
     quantityInput.classList.add('quantity-input');
-    quantityInput.style.display = 'none'; // Hide the input by default
-    quantityInput.style.position = 'absolute'; // Position it absolutely within the card
-    quantityInput.style.top = '50%'; // Center it vertically
-    quantityInput.style.left = '50%'; // Center it horizontally
-    quantityInput.style.transform = 'translate(-50%, -50%)'; // Adjust the position so it's centered properly
+    quantityInput.style.display = 'none';
+    quantityInput.style.position = 'absolute';
+    quantityInput.style.top = '50%';
+    quantityInput.style.left = '50%';
+    quantityInput.style.transform = 'translate(-50%, -50%)';
 
-    // Add event listener to stop propagation
     quantityInput.addEventListener('click', function(event) {
         event.stopPropagation();
     });
 
-    div.appendChild(quantityInput); // Append the input to the card
-
+    div.appendChild(quantityInput);
     return div;
 }
 
@@ -234,11 +228,12 @@ function createParagraph(cell, cellIndex, dataRowItems) {
     const p = document.createElement('p');
     const span = document.createElement('span');
     span.style.fontWeight = 'bold';
+
     if (items[0][cellIndex] === 'Title') {
         p.textContent = cell;
         p.classList.add('title');
     } else if (['SKU', 'ID'].includes(items[0][cellIndex])) {
-        p.textContent = cell; // Only include the number
+        p.textContent = cell;
         p.classList.add('sku');
     } else if (items[0][cellIndex] === 'Quantity') {
         const quantityContainer = document.createElement('div');
@@ -258,56 +253,16 @@ function createParagraph(cell, cellIndex, dataRowItems) {
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
-  // Get the modal
-  var modal = document.getElementById("myModal");
+    const modal = document.getElementById("myModal");
+    const span = document.getElementsByClassName("close")[0];
 
-  // Get the image and insert it inside the modal - use its "alt" text as a caption
-  var modalImg = document.getElementById("img01");
-  var captionText = document.getElementById("caption");
-
-  // Function to create a card
-  function createCard(dataRowItems) {
-    const div = document.createElement('div');
-    div.classList.add('card');
-    const itemKey = dataRowItems.join(',');
-    if (selectedItems.has(itemKey)) {
-      div.classList.add('selected');
+    span.onclick = function() {
+        modal.style.display = "none";
     }
-    div.addEventListener('click', function() {
-      toggleSelection(div, itemKey);
-      // Open modal with larger image
-      var img = div.querySelector('img');
-      modal.style.display = "block";
-      modalImg.src = img.src;
-      captionText.innerHTML = img.alt;
-    });
-    const contentDiv = createContentDiv(dataRowItems);
-    div.appendChild(contentDiv);
-    // Add quantity input
-    const quantityInput = document.createElement('input');
-    quantityInput.type = 'number';
-    quantityInput.min = '1';
-    quantityInput.max = '99';
-    quantityInput.value = '1';
-    quantityInput.classList.add('quantity-input');
-    quantityInput.style.display = 'none'; // Hide the input by default
-    quantityInput.style.position = 'absolute'; // Position it absolutely within the card
-    quantityInput.style.top = '50%'; // Center it vertically
-    quantityInput.style.left = '50%'; // Center it horizontally
-    quantityInput.style.transform = 'translate(-50%, -50%)'; // Adjust the position so it's centered properly
-    // Add event listener to stop propagation
-    quantityInput.addEventListener('click', function(event) {
-      event.stopPropagation();
-    });
-    div.appendChild(quantityInput); // Append the input to the card
-    return div;
-  }
 
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close");
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() { 
-    modal.style.display = "none";
-  }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
 });
