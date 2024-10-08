@@ -110,13 +110,6 @@ function displayGallery() {
     }
 }
 
-// Create option for dropdown
-function createOption(value) {
-    const option = document.createElement('option');
-    option.value = value;
-    option.textContent = value;
-    return option;
-}
 
 // Add reset button
 const resetButton = document.createElement('button');
