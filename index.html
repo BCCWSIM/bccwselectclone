@@ -13,7 +13,12 @@
         html, body, h1, h2, h3, h4, h5, h6 {
             font-family: "Roboto", sans-serif;
         }
-        /* Modal styles */
+        body, html {
+            height: 100%;
+            font-family: "Inconsolata", "Arial", sans-serif;
+            text-align: center;
+            background: #EDEDED;
+        }
         .modal {
             display: none; 
             position: fixed; 
@@ -40,19 +45,42 @@
             font-weight: bold;
             cursor: pointer;
         }
+        /* Other styles remain unchanged */
+        .container, .logo-img-title-container, .input-details, .checkbox-group label, .logo-container, button {
+            display: inherit;
+            justify-content: center;
+            border-radius: 5px;
+            width: fit-content;
+        }
+        .logo1, .logo2 {
+            flex: 2;
+            max-width: 100%;
+            max-height: 100px;
+            background-color: rgba(255, 255, 255, 0.60);
+            padding: 1px;
+            border-radius: 15px;
+            margin: 10px;
+            object-fit: contain;
+        }
+        .thumbnail {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            border-radius: 15px;
+            padding-bottom: 10px;
+        }
+        /* Add other existing styles here */
     </style>
 </head>
 <body class="w3-light-grey">
     <!-- Page Container -->
     <div class="w3-content w3-margin-top" style="max-width:1400px;">
-        <!-- The Grid -->
         <div class="w3-row-padding">
-            <!-- Right Column -->
             <div class="w3">
                 <div class="w3-container w3-card w3-white w3-margin-bottom">
                     <div style="display: flex; justify-content: space-between;">
-                        <img src="https://lh3.googleusercontent.com/d/1pycErU1dgRNfZEFXBJToLkj5mVqSkFjb" class="logo1" style="width: 45%;" alt="Logo 1">
-                        <img src="https://lh3.googleusercontent.com/d/19bi1iNE8JYD1kVJ3nGH0YevbPh-sdQ9b" class="logo1" style="width: 45%;" alt="Logo 2">
+                        <img src="https://lh3.googleusercontent.com/d/1pycErU1dgRNfZEFXBJToLkj5mVqSkFjb" class="logo1" alt="Logo 1">
+                        <img src="https://lh3.googleusercontent.com/d/19bi1iNE8JYD1kVJ3nGH0YevbPh-sdQ9b" class="logo1" alt="Logo 2">
                     </div>
                     <div id="searchAndFilterContainer">
                         <input type="text" id="myInput" onkeyup="liveSearch()" placeholder="Search...">
@@ -90,7 +118,7 @@
         var captionText = document.getElementById("caption");
 
         // Get the images that open the modal
-        var images = document.querySelectorAll(".thumbnail"); // Ensure your images have the class "thumbnail"
+        var images = document.querySelectorAll(".thumbnail");
 
         images.forEach((image) => {
             image.onclick = function() {
