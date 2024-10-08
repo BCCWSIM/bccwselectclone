@@ -181,6 +181,14 @@ function createCard(dataRowItems) {
         div.classList.add('selected');
     }
 
+   function createCard(dataRowItems) {
+    const div = document.createElement('div');
+    div.classList.add('card');
+    const itemKey = dataRowItems.join(',');
+    if (selectedItems.has(itemKey)) {
+        div.classList.add('selected');
+    }
+
     // Modal functionality
     div.addEventListener('click', function() {
         const img = div.querySelector('img');
@@ -232,13 +240,13 @@ function createParagraph(cell, cellIndex, dataRowItems) {
     const span = document.createElement('span');
     span.style.fontWeight = 'bold';
 
-    if (items[0][cellIndex] === 'Title') {
+    if (items[cellIndex] === 'Title') {
         p.textContent = cell;
         p.classList.add('title');
-    } else if (['SKU', 'ID'].includes(items[0][cellIndex])) {
+    } else if (['SKU', 'ID'].includes(items[cellIndex])) {
         p.textContent = cell;
         p.classList.add('sku');
-    } else if (items[0][cellIndex] === 'Quantity') {
+    } else if (items[cellIndex] === 'Quantity') {
         const quantityContainer = document.createElement('div');
         quantityContainer.classList.add('quantity-container');
         const quantity = document.createElement('p');
@@ -257,7 +265,7 @@ function createParagraph(cell, cellIndex, dataRowItems) {
 
 document.addEventListener('DOMContentLoaded', (event) => {
     const modal = document.getElementById("myModal");
-    const span = document.getElementsByClassName("close")[0];
+    const span = document.getElementsByClassName("close");
 
     span.onclick = function() {
         modal.style.display = "none";
