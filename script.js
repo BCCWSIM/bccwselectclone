@@ -185,32 +185,20 @@ function createContentDiv(dataRowItems) {
     return contentDiv;
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-  // Get the modal
-  var modal = document.getElementById("myModal");
 
-  // Get the image and insert it inside the modal - use its "alt" text as a caption
-  var modalImg = document.getElementById("img01");
-  var captionText = document.getElementById("caption");
-
-  // Function to create a card
-  function createCard(dataRowItems) {
+function createCard(dataRowItems) {
     const div = document.createElement('div');
     div.classList.add('card');
     const itemKey = dataRowItems.join(',');
     if (selectedItems.has(itemKey)) {
-      div.classList.add('selected');
+        div.classList.add('selected');
     }
     div.addEventListener('click', function() {
-      toggleSelection(div, itemKey);
-      // Open modal with larger image
-      var img = div.querySelector('img');
-      modal.style.display = "block";
-      modalImg.src = img.src;
-      captionText.innerHTML = img.alt;
+        toggleSelection(div, itemKey);
     });
     const contentDiv = createContentDiv(dataRowItems);
     div.appendChild(contentDiv);
+
     // Add quantity input
     const quantityInput = document.createElement('input');
     quantityInput.type = 'number';
@@ -223,23 +211,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     quantityInput.style.top = '50%'; // Center it vertically
     quantityInput.style.left = '50%'; // Center it horizontally
     quantityInput.style.transform = 'translate(-50%, -50%)'; // Adjust the position so it's centered properly
+
     // Add event listener to stop propagation
     quantityInput.addEventListener('click', function(event) {
-      event.stopPropagation();
+        event.stopPropagation();
     });
+
     div.appendChild(quantityInput); // Append the input to the card
+
     return div;
-  }
-
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close");
-
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function() { 
-    modal.style.display = "none";
-  }
-});
-
+}
 
 function createImage(cell) {
     const img = document.createElement('img');
@@ -330,4 +311,3 @@ document.addEventListener('DOMContentLoaded', (event) => {
     modal.style.display = "none";
   }
 });
-
