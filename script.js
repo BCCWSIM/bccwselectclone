@@ -181,17 +181,32 @@ function createCard(dataRowItems) {
         div.classList.add('selected');
     }
 
-    // Modal functionality
-    div.addEventListener('click', function() {
-        const img = div.querySelector('img');
-        const modal = document.getElementById("myModal");
-        const modalImg = document.getElementById("img01");
-        const captionText = document.getElementById("caption");
-        
-        modal.style.display = "block";
-        modalImg.src = img.src;
-        captionText.innerHTML = img.alt;
-    });
+    // Modal functionalitydiv.addEventListener('click', function() {
+    const img = div.querySelector('img');
+    const modal = document.getElementById("myModal");
+    const modalImg = document.getElementById("img01");
+    const captionText = document.getElementById("caption");
+    
+    modal.style.display = "block";
+    modalImg.src = img.src;
+    captionText.innerHTML = img.alt;
+    
+    // Add a class to the body to dim background
+    document.body.classList.add('modal-open');
+});
+
+// Close modal logic
+span.onclick = function() {
+    modal.style.display = "none";
+    document.body.classList.remove('modal-open'); // Remove class on close
+}
+
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Remove class on close
+    }
+}
 
     const contentDiv = createContentDiv(dataRowItems);
     div.appendChild(contentDiv);
