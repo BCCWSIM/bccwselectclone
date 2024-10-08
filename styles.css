@@ -439,4 +439,48 @@ input:checked + .slider .switch-label.days {
   text-decoration: none;
   cursor: pointer;
 }
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+}
+
+/* Modal content */
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 80%; /* Max width of modal image */
+    max-height: 80%; /* Max height of modal image */
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust position */
+}
+
+/* Close button */
+.close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Darken background cards */
+.card {
+    transition: opacity 0.3s;
+}
+
+.modal-open .card {
+    opacity: 0.3; /* Make cards less visible when modal is open */
+}
 
