@@ -272,3 +272,29 @@ function createParagraph(cell, cellIndex, dataRowItems) {
     }
     return p;
 }
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  // Get the modal
+  var modal = document.getElementById("myModal");
+
+  // Get the image and insert it inside the modal - use its "alt" text as a caption
+  var modalImg = document.getElementById("img01");
+  var captionText = document.getElementById("caption");
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', function() {
+      var img = card.querySelector('img');
+      modal.style.display = "block";
+      modalImg.src = img.src;
+      captionText.innerHTML = img.alt;
+    });
+  });
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close");
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() { 
+    modal.style.display = "none";
+  }
+});
