@@ -270,50 +270,50 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.body.classList.remove('modal-open'); // Remove class on close
         }
     }
+
+    // Ensure your CSS includes these styles
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+            display: flex; /* Use flexbox to center the modal */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+        }
+
+        /* Modal content */
+        .modal-content {
+            max-width: 90%; /* Max width of modal image */
+            max-height: 90%; /* Max height of modal image */
+        }
+
+        /* Close button */
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Darken background cards */
+        .card {
+            transition: opacity 0.3s;
+        }
+
+        .modal-open .card {
+            opacity: 0.3; /* Make cards less visible when modal is open */
+        }
+    `;
+    document.head.appendChild(style);
 });
-
-// Ensure your CSS includes these styles
-const style = document.createElement('style');
-style.textContent = `
-    /* Modal styles */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
-    }
-
-    .modal-content {
-        margin: auto;
-        display: block;
-        max-width: 80%;
-        max-height: 80%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    .close {
-        position: absolute;
-        top: 20px;
-        right: 30px;
-        color: white;
-        font-size: 40px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .card {
-        transition: opacity 0.3s;
-    }
-
-    .modal-open .card {
-        opacity: 0.3;
-    }
-`;
-document.head.appendChild(style);
