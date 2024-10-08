@@ -181,32 +181,20 @@ function createCard(dataRowItems) {
         div.classList.add('selected');
     }
 
-    // Modal functionalitydiv.addEventListener('click', function() {
-    const img = div.querySelector('img');
-    const modal = document.getElementById("myModal");
-    const modalImg = document.getElementById("img01");
-    const captionText = document.getElementById("caption");
-    
-    modal.style.display = "block";
-    modalImg.src = img.src;
-    captionText.innerHTML = img.alt;
-    
-    // Add a class to the body to dim background
-    document.body.classList.add('modal-open');
-});
+    // Modal functionality
+    div.addEventListener('click', function() {
+        const img = div.querySelector('img');
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("img01");
+        const captionText = document.getElementById("caption");
+        
+        modal.style.display = "block";
+        modalImg.src = img.src;
+        captionText.innerHTML = img.alt;
 
-// Close modal logic
-span.onclick = function() {
-    modal.style.display = "none";
-    document.body.classList.remove('modal-open'); // Remove class on close
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-        document.body.classList.remove('modal-open'); // Remove class on close
-    }
-}
+        // Add class to dim background
+        document.body.classList.add('modal-open');
+    });
 
     const contentDiv = createContentDiv(dataRowItems);
     div.appendChild(contentDiv);
@@ -273,11 +261,59 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     span.onclick = function() {
         modal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Remove class on close
     }
 
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
+            document.body.classList.remove('modal-open'); // Remove class on close
         }
     }
 });
+
+// Ensure your CSS includes these styles
+const style = document.createElement('style');
+style.textContent = `
+    /* Modal styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 80%;
+        max-height: 80%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 30px;
+        color: white;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .card {
+        transition: opacity 0.3s;
+    }
+
+    .modal-open .card {
+        opacity: 0.3;
+    }
+`;
+document.head.appendChild(style);
