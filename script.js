@@ -180,4 +180,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         p.classList.add(className);
         return p;
     }
+
+    // Modal structure for content
+    const modalContent = document.createElement('div');
+    modalContent.classList.add('modal-content');
+    modalContent.innerHTML = `
+        <span class="close">&times;</span>
+        <img id="img01" alt="">
+        <div id="caption"></div>
+    `;
+    modal.appendChild(modalContent);
 });
