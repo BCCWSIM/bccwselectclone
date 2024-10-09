@@ -339,7 +339,13 @@ input:checked + .slider .switch-label.days {
     order: 3;
 }
 
-/* Modal styles */
+body, html {
+    height: 100%;
+    font-family: "Inconsolata", "Arial", sans-serif;
+    text-align: center;
+    background: #EDEDED;
+}
+
 .modal {
     display: none; 
     position: fixed; 
@@ -349,18 +355,16 @@ input:checked + .slider .switch-label.days {
     width: 100%; 
     height: 100%; 
     background-color: rgba(0, 0, 0, 0.8); 
-    display: flex; /* Use flexbox to center the modal */
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
 }
 
-/* Modal content */
 .modal-content {
-    max-width: 80%; 
-    max-height: 80%; 
+    max-width: 90%; 
+    max-height: 90%; 
 }
 
-/* Close button */
 .close {
     position: absolute;
     top: 20px;
@@ -371,7 +375,6 @@ input:checked + .slider .switch-label.days {
     cursor: pointer;
 }
 
-/* Darken background cards */
 .card {
     transition: opacity 0.3s;
 }
@@ -379,4 +382,6 @@ input:checked + .slider .switch-label.days {
 .modal-open .card {
     opacity: 0.3; 
 }
+
+/* Add any other styles here */
 
