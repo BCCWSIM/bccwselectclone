@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Fetch CSV data
     let items = [];
     let headers, skuIndex, categoryIndex, subcategoryIndex;
+    let timeout; // Declare timeout variable
 
     fetch('Resources.csv')
         .then(response => response.text())
@@ -195,4 +196,36 @@ document.addEventListener('DOMContentLoaded', (event) => {
         <div id="caption"></div>
     `;
     modal.appendChild(modalContent);
+
+    // Live search function
+    function liveSearch() {
+        clearTimeout(timeout);
+
+        const input = document.getElementById("myInput");
+        const filter = input.value.toUpperCase();
+        const gallery = document.getElementById('csvGallery');
+        const cards = gallery.getElementsByClassName('card');
+
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].getElementsByClassName("title")[0];
+            let sku = cards[i].getElementsByClassName("sku")[0];
+            if (title || sku) {
+                let txtValueTitle = title ? title.textContent || title.innerText : '';
+                let txtValueSku = sku ? sku.textContent || sku.innerText : '';
+                if (txtValueTitle.toUpperCase().indexOf(filter) > -1 || txtValueSku.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }       
+        }
+
+        timeout = setTimeout(function () {
+            input.value = '';
+        }, 1500); // Clear the input field 1.5 seconds after the user stops typing
+    }
+
+    // Attach live search to input
+    const input = document.getElementById("myInput");
+    input.addEventListener("input", liveSearch);
 });
