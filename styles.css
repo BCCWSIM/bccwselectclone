@@ -53,7 +53,7 @@ body, html {
 
 .thumbnail {
     width: 100%;
-    height: auto; /* Changed to auto to maintain aspect ratio */
+    height: auto; 
     max-height: 400px;
     border-radius: 15px;
     padding-bottom: 10px;
@@ -96,16 +96,16 @@ label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 300px; /* Fixed height for cards */
+    height: 300px; 
     max-width: calc(23% - 5px);
     position: relative;
 }
 
 .card img {
-    max-height: 65%; /* Limits the image height to 65% of the card */
-    width: auto; /* Adjusts to maintain aspect ratio */
-    border-radius: 15px 15px 0 0; /* Rounded corners for the top of the card */
-    flex-shrink: 0; /* Prevents image from shrinking */
+    max-height: 65%; 
+    width: auto; 
+    border-radius: 15px 15px 0 0; 
+    flex-shrink: 0; 
 }
 
 .card > div {
@@ -113,9 +113,9 @@ label {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%; /* Makes sure this div takes full height of the card */
+    height: 100%; 
     text-align: center;
-    flex-grow: 1; /* Ensures it takes the remaining space below the image */
+    flex-grow: 1; 
 }
 
 @media (max-width: 400px) {
@@ -153,6 +153,12 @@ label {
     min-height: 15px;
     text-align: center;
     margin-bottom: 10px;
+}
+
+#itemCount {
+    font-size: 1.1em;
+    margin: 10px 0;
+    color: #333; /* Adjust color as needed */
 }
 
 .cart {
@@ -340,7 +346,7 @@ input:checked + .slider .switch-label.days {
 }
 
 .card > div > .sku {
-    align-self: flex-end; /* Use flex-end to align correctly */
+    align-self: flex-end; 
     font-size: 0.7em;
 }
 
@@ -360,15 +366,15 @@ input:checked + .slider .switch-label.days {
 
 .modal-content {
     max-width: 90%; 
-    max-height: 65vh; /* Adjusted to limit height */
-    overflow: auto; /* Ensures content is scrollable if too large */
+    max-height: 65vh; 
+    overflow: auto; 
 }
 
 .modal-content img {
-    max-height: 65vh; /* Ensures the image doesn't exceed this height */
-    width: auto; /* Adjust to maintain aspect ratio */
-    display: block; /* Centers image in the modal */
-    margin: 0 auto; /* Centers image horizontally */
+    max-height: 65vh; 
+    width: auto; 
+    display: block; 
+    margin: 0 auto; 
 }
 
 .close {
