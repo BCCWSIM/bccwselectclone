@@ -372,7 +372,7 @@ input:checked + .slider .switch-label.days {
 
 .modal-content img {
     max-height: 65vh; 
-    width: auto; 
+    width: 100%; 
     display: block; 
     margin: 0 auto; 
 }
