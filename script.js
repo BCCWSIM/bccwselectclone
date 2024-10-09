@@ -183,6 +183,7 @@ function createCard(dataRowItems) {
 
     // Modal functionality
     div.addEventListener('click', function() {
+        console.log('Card clicked:', itemKey); // Debugging line
         const img = div.querySelector('img');
         const modal = document.getElementById("myModal");
         const modalImg = document.getElementById("img01");
@@ -211,13 +212,13 @@ function createCard(dataRowItems) {
     quantityInput.style.left = '50%';
     quantityInput.style.transform = 'translate(-50%, -50%)';
 
-    quantityInput.addEventListener('click', function(event) {
-        event.stopPropagation();
+    quantityInput.addEventListener('click', function(ev) {
+        ev.stopPropagation(); // Prevent click event from bubbling up to the card
     });
 
-    div.appendChild(quantityInput);
     return div;
 }
+
 
 function createImage(cell) {
     const img = document.createElement('img');
