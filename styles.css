@@ -336,14 +336,6 @@ input:checked + .slider .switch-label.days {
 .card > div > .sku {
     align-self: flex-end; /* Use flex-end to align correctly */
     font-size: 0.7em;
-    order: 3;
-}
-
-body, html {
-    height: 100%;
-    font-family: "Inconsolata", "Arial", sans-serif;
-    text-align: center;
-    background: #EDEDED;
 }
 
 .modal {
@@ -362,7 +354,15 @@ body, html {
 
 .modal-content {
     max-width: 90%; 
-    max-height: 90%; 
+    max-height: 65vh; /* Adjusted to limit height */
+    overflow: auto; /* Ensures content is scrollable if too large */
+}
+
+.modal-content img {
+    max-height: 65vh; /* Ensures the image doesn't exceed this height */
+    width: auto; /* Adjust to maintain aspect ratio */
+    display: block; /* Centers image in the modal */
+    margin: 0 auto; /* Centers image horizontally */
 }
 
 .close {
@@ -384,4 +384,3 @@ body, html {
 }
 
 /* Add any other styles here */
-
