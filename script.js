@@ -227,7 +227,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         // Update the item count display for search results
-        document.getElementById('itemCount').textContent = `Items found: ${itemCount}`;
+        document.getElementById('itemCount').textContent = `${itemCount}`;
 
         timeout = setTimeout(function () {
             input.value = '';
