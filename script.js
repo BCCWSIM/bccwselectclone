@@ -39,10 +39,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             categorySelect.addEventListener('change', displayGallery);
             subcategorySelect.addEventListener('change', displayGallery);
 
-            galleryContainer.insertBefore(createLabel('Category:', 'categorySelect'), galleryContainer.firstChild);
-            galleryContainer.insertBefore(categorySelect, galleryContainer.firstChild);
-            galleryContainer.insertBefore(createLabel('Subcategory:', 'subcategorySelect'), galleryContainer.firstChild);
-            galleryContainer.insertBefore(subcategorySelect, galleryContainer.firstChild);
+            // Insert the labels and dropdowns in the correct order
+            galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
+            galleryContainer.appendChild(categorySelect);
+            galleryContainer.appendChild(createLabel('Subcategory:', 'subcategorySelect'));
+            galleryContainer.appendChild(subcategorySelect);
 
             displayGallery(items);
             document.getElementById('csvGallery').style.display = 'flex';
