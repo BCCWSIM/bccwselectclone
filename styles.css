@@ -96,9 +96,10 @@ label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 300px; 
-    max-width: calc(23% - 5px);
+    width: 200px; /* Set a fixed width for the card */
+    height: 300px; /* Set a fixed height for the card */
     position: relative;
+    overflow: hidden; /* Ensure no overflow of content */
 }
 
 .card img {
@@ -114,10 +115,11 @@ label {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%; 
+    height: calc(100% - 65%); /* Adjust this based on image height */
     text-align: center;
     flex-grow: 1; 
 }
+
 
 @media (max-width: 400px) {
     .card {
