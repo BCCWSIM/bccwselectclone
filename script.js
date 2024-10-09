@@ -189,7 +189,7 @@ function createCard(dataRowItems) {
         const modalImg = document.getElementById("img01");
         const captionText = document.getElementById("caption");
         
-        modal.style.display = "hidden";
+        modal.style.display = "block"; // Show the modal
         modalImg.src = img.src;
         captionText.innerHTML = img.alt;
 
@@ -218,6 +218,7 @@ function createCard(dataRowItems) {
 
     return div;
 }
+
 
 
 function createImage(cell) {
