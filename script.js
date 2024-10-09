@@ -54,7 +54,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 document.getElementById('subcategorySelect').value = 'All';
                 displayGallery();
             });
-            galleryContainer.insertBefore(resetButton, galleryContainer.firstChild);
+
+            // Insert the reset button below the subcategory select
+            galleryContainer.insertBefore(resetButton, document.getElementById('itemCount'));
 
             displayGallery(items);
             document.getElementById('csvGallery').style.display = 'flex';
