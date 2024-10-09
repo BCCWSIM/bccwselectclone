@@ -100,13 +100,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         const gallery = document.getElementById('csvGallery');
         gallery.innerHTML = '';
+        let itemCount = 0; // Initialize item count
         for (let i = 1; i < items.length; i++) {
             if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
                 (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
                 const div = createCard(items[i]);
                 gallery.appendChild(div);
+                itemCount++; // Increment count for each displayed item
             }
         }
+
+        // Update the item count display
+        document.getElementById('itemCount').textContent = `Items found: ${itemCount}`;
     }
 
     function createOption(value) {
