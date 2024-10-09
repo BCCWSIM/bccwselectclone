@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Fetch CSV data
     let items = [];
     let headers, skuIndex, categoryIndex, subcategoryIndex;
-    let timeout; // Declare timeout variable
 
     fetch('Resources.csv')
         .then(response => response.text())
@@ -45,6 +44,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
             galleryContainer.appendChild(categorySelect);
             galleryContainer.appendChild(createLabel('Subcategory:', 'subcategorySelect'));
             galleryContainer.appendChild(subcategorySelect);
+
+            // Add reset button
+            const resetButton = document.createElement('button');
+            resetButton.textContent = 'Reset';
+            resetButton.style.display = 'block';
+            resetButton.addEventListener('click', function() {
+                document.getElementById('categorySelect').value = 'All';
+                document.getElementById('subcategorySelect').value = 'All';
+                displayGallery();
+            });
+            galleryContainer.insertBefore(resetButton, galleryContainer.firstChild);
 
             displayGallery(items);
             document.getElementById('csvGallery').style.display = 'flex';
@@ -187,6 +197,44 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return p;
     }
 
+    // Live search function
+    let timeout = null;
+
+    function liveSearch() {
+        clearTimeout(timeout);
+
+        const input = document.getElementById("myInput");
+        const filter = input.value.toUpperCase();
+        const gallery = document.getElementById('csvGallery');
+        const cards = gallery.getElementsByClassName('card');
+
+        let itemCount = 0; // Reset item count for search results
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].getElementsByClassName("title")[0];
+            let sku = cards[i].getElementsByClassName("sku")[0];
+            if (title || sku) {
+                let txtValueTitle = title ? title.textContent || title.innerText : '';
+                let txtValueSku = sku ? sku.textContent || sku.innerText : '';
+                if (txtValueTitle.toUpperCase().indexOf(filter) > -1 || txtValueSku.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                    itemCount++; // Increment count for displayed items
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }       
+        }
+
+        // Update the item count display for search results
+        document.getElementById('itemCount').textContent = `Items found: ${itemCount}`;
+
+        timeout = setTimeout(function () {
+            input.value = '';
+        }, 1500); // Clear the input field 1.5 seconds after the user stops typing
+    }
+
+    // Event listener for live search input
+    document.getElementById("myInput").addEventListener('input', liveSearch);
+
     // Modal structure for content
     const modalContent = document.createElement('div');
     modalContent.classList.add('modal-content');
@@ -196,42 +244,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
         <div id="caption"></div>
     `;
     modal.appendChild(modalContent);
-
-    // Live search function
-    function liveSearch() {
-    clearTimeout(timeout);
-
-    const input = document.getElementById("myInput");
-    const filter = input.value.toUpperCase();
-    const gallery = document.getElementById('csvGallery');
-    const cards = gallery.getElementsByClassName('card');
-
-    let itemCount = 0; // Initialize item count
-
-    for (let i = 0; i < cards.length; i++) {
-        let title = cards[i].getElementsByClassName("title")[0];
-        let sku = cards[i].getElementsByClassName("sku")[0];
-        if (title || sku) {
-            let txtValueTitle = title ? title.textContent || title.innerText : '';
-            let txtValueSku = sku ? sku.textContent || sku.innerText : '';
-            if (txtValueTitle.toUpperCase().indexOf(filter) > -1 || txtValueSku.toUpperCase().indexOf(filter) > -1) {
-                cards[i].style.display = "";
-                itemCount++; // Increment count for each displayed item
-            } else {
-                cards[i].style.display = "none";
-            }
-        }       
-    }
-
-    // Update the item count display
-    document.getElementById('itemCount').textContent = `Items found: ${itemCount}`;
-
-    timeout = setTimeout(function () {
-        input.value = '';
-    }, 1500); // Clear the input field 2 seconds after the user stops typing
-}
-
-    // Attach live search to input
-    const input = document.getElementById("myInput");
-    input.addEventListener("input", liveSearch);
 });
