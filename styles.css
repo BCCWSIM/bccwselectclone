@@ -348,17 +348,14 @@ input:checked + .slider .switch-label.days {
     height: 100%; 
     background-color: rgba(0, 0, 0, 0.8); 
     display: flex; 
-    align-items: center; /* Vertically centers the modal content */
-    justify-content: center; /* Horizontally centers the modal content */
+    align-items: center; 
+    justify-content: center; 
 }
 
 .modal-content {
     max-width: 90%; 
-    max-height: 65vh; /* Limits the height */
+    max-height: 65vh; /* Adjusted to limit height */
     overflow: auto; /* Ensures content is scrollable if too large */
-    display: flex; /* Use flexbox for the modal content */
-    align-items: center; /* Center image vertically in modal */
-    justify-content: center; /* Center image horizontally in modal */
 }
 
 .modal-content img {
@@ -367,7 +364,6 @@ input:checked + .slider .switch-label.days {
     display: block; /* Centers image in the modal */
     margin: 0 auto; /* Centers image horizontally */
 }
-
 
 .close {
     position: absolute;
