@@ -52,11 +52,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             resetButton.addEventListener('click', function() {
                 document.getElementById('categorySelect').value = 'All';
                 document.getElementById('subcategorySelect').value = 'All';
-                displayGallery();
+                displayGallery(); // Refresh the gallery after reset
             });
-            galleryContainer.insertBefore(resetButton, galleryContainer.firstChild);
 
-            displayGallery(items);
+            // Insert the reset button below the subcategory select
+            galleryContainer.appendChild(resetButton);
+
+            displayGallery(items); // Initially display all items
             document.getElementById('csvGallery').style.display = 'flex';
         })
         .catch(error => console.error('Error fetching CSV:', error));
