@@ -259,19 +259,30 @@ function createParagraph(cell, cellIndex, dataRowItems) {
 
 document.addEventListener('DOMContentLoaded', (event) => {
     const modal = document.getElementById("myModal");
-    const span = document.getElementsByClassName("close")[0];
+    const closeModalButton = document.getElementsByClassName("close")[0];
 
-    span.onclick = function() {
+    // Ensure the modal starts hidden
+    modal.style.display = "none";
+
+    // Close modal when close button is clicked
+    closeModalButton.onclick = function() {
+        closeModal();
+    }
+
+    // Close modal when clicking outside of the modal content
+    window.onclick = function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
+    // Function to close the modal and remove the background dimming class
+    function closeModal() {
         modal.style.display = "none";
         document.body.classList.remove('modal-open'); // Remove class on close
     }
+});
 
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            document.body.classList.remove('modal-open'); // Remove class on close
-        }
-    }
 
     // Ensure your CSS includes these styles
     const style = document.createElement('style');
