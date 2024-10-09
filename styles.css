@@ -96,11 +96,26 @@ label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: auto;
-    max-height: 450px;
-    flex: 1 1 225px;
+    height: 300px; /* Fixed height for cards */
     max-width: calc(23% - 5px);
     position: relative;
+}
+
+.card img {
+    max-height: 65%; /* Limits the image height to 65% of the card */
+    width: auto; /* Adjusts to maintain aspect ratio */
+    border-radius: 15px 15px 0 0; /* Rounded corners for the top of the card */
+    flex-shrink: 0; /* Prevents image from shrinking */
+}
+
+.card > div {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; /* Makes sure this div takes full height of the card */
+    text-align: center;
+    flex-grow: 1; /* Ensures it takes the remaining space below the image */
 }
 
 @media (max-width: 400px) {
@@ -111,15 +126,6 @@ label {
 
 .card.selected {
     background-color: lightgreen;
-}
-
-.card > div {
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    text-align: center;
 }
 
 .quantity-input {
