@@ -4,19 +4,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const closeModalButton = modal.querySelector(".close");
     modal.style.display = "none";
 
-    closeModalButton.onclick = closeModal;
-    window.onclick = function(event) {
-        if (event.target === modal) {
-            closeModal();
-        }
-    };
-
+    // Function to close the modal
     function closeModal() {
         modal.style.display = "none";
         document.body.classList.remove('modal-open');
     }
 
-    // Fetch CSV data
+    // Close modal when the close button is clicked
+    closeModalButton.addEventListener('click', closeModal);
+
+    // Close modal when clicking outside of it
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Fetch CSV data and set up gallery
     let items = [];
     let headers, skuIndex, categoryIndex, subcategoryIndex;
 
@@ -236,14 +240,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Event listener for live search input
     document.getElementById("myInput").addEventListener('input', liveSearch);
-
-    // Ensure modal content structure is set correctly
-    const modalContent = document.createElement('div');
-    modalContent.classList.add('modal-content');
-    modalContent.innerHTML = `
-        <span class="close">&times;</span>
-        <img id="img01" alt="">
-        <div id="caption"></div>
-    `;
-    modal.appendChild(modalContent);
 });
