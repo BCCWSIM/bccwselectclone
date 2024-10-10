@@ -25,14 +25,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetch('Resources.csv')
         .then(response => response.text())
         .then(csvData => {
-            items = csvData.split('\n').filter(row => row.length > 0).map(row => row.split(','));
+            items = csvData.split('\n')
+                .filter(row => row.trim().length > 0) // Ensure no empty rows
+                .map(row => row.split(',').map(cell => cell.trim())); // Trim each cell
+
             headers = items[0];
             skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('Subcategory');
 
-            const categories = new Set(items.slice(1).map(item => item[categoryIndex]));
-            const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex]));
+            // Populate categories and subcategories
+            const categories = new Set(items.slice(1).map(item => item[categoryIndex] || '')); // Handle empty categories
+            const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || '')); // Handle empty subcategories
 
             const galleryContainer = document.getElementById('galleryContainer');
             const categorySelect = createDropdown('categorySelect', categories);
@@ -57,7 +61,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
             galleryContainer.appendChild(resetButton);
 
-            displayGallery(items); // Initially display all items
+            displayGallery(); // Initially display all items
             document.getElementById('csvGallery').style.display = 'flex';
         })
         .catch(error => console.error('Error fetching CSV:', error));
@@ -70,7 +74,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         select.appendChild(createOption('All'));
 
         options.forEach(optionValue => {
-            select.appendChild(createOption(optionValue));
+            if (optionValue) { // Only add non-empty options
+                select.appendChild(createOption(optionValue));
+            }
         });
 
         return select;
@@ -82,24 +88,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let selectedSubcategory = subcategorySelect.value;
 
         let filteredSubcategories = new Set();
-        if (selectedCategory !== 'All') {
-            for (let i = 1; i < items.length; i++) {
-                if (items[i][categoryIndex] === selectedCategory) {
-                    filteredSubcategories.add(items[i][subcategoryIndex]);
+        for (let i = 1; i < items.length; i++) {
+            const item = items[i];
+            if ((selectedCategory === 'All' || item[categoryIndex] === selectedCategory)) {
+                const subcategory = item[subcategoryIndex] || ''; // Handle empty subcategory
+                if (subcategory) {
+                    filteredSubcategories.add(subcategory);
                 }
             }
-        } else {
-            filteredSubcategories = new Set(items.slice(1).map(item => item[subcategoryIndex]));
         }
 
+        // Update subcategory dropdown
         subcategorySelect.innerHTML = ''; // Clear current options
         subcategorySelect.appendChild(createOption('All'));
         filteredSubcategories.forEach(subcategory => {
             subcategorySelect.appendChild(createOption(subcategory));
         });
-
-        selectedSubcategory = filteredSubcategories.has(selectedSubcategory) ? selectedSubcategory : 'All';
-        subcategorySelect.value = selectedSubcategory;
 
         const gallery = document.getElementById('csvGallery');
         gallery.innerHTML = '';
