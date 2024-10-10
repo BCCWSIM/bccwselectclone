@@ -2,18 +2,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Modal initialization
     const modal = document.getElementById("myModal");
     const closeModalButton = modal.querySelector(".close");
-    modal.style.display = "none";
+    const modalImg = document.getElementById("img01");
+    const captionText = document.getElementById("caption");
 
+    // Function to close the modal
+    function closeModal() {
+        modal.style.display = "none";
+        document.body.classList.remove('modal-open');
+    }
+
+    // Close the modal when the close button is clicked
     closeModalButton.onclick = closeModal;
+
+    // Close the modal when clicking outside the modal content
     window.onclick = function(event) {
         if (event.target === modal) {
             closeModal();
         }
     };
 
-    function closeModal() {
-        modal.style.display = "none";
-        document.body.classList.remove('modal-open');
+    // Show the modal with an image and caption
+    function showModal(imageSrc, caption) {
+        modal.style.display = "block"; 
+        modalImg.src = imageSrc;
+        captionText.innerHTML = caption;
+        document.body.classList.add('modal-open');
     }
 
     // Fetch CSV data
@@ -50,8 +63,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             resetButton.textContent = 'Reset';
             resetButton.style.display = 'block';
             resetButton.addEventListener('click', function() {
-                document.getElementById('categorySelect').value = 'All';
-                document.getElementById('subcategorySelect').value = 'All';
+                categorySelect.value = 'All';
+                subcategorySelect.value = 'All';
                 displayGallery(); // Refresh the gallery after reset
             });
 
@@ -85,60 +98,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function displayGallery() {
         const selectedCategory = document.getElementById('categorySelect').value;
-        let selectedSubcategory = document.getElementById('subcategorySelect').value;
-
-        let filteredSubcategories = new Set();
-        if (selectedCategory !== 'All') {
-            for (let i = 1; i < items.length; i++) {
-                if (items[i][categoryIndex] === selectedCategory) {
-                    filteredSubcategories.add(items[i][subcategoryIndex]);
-                }
-            }
-        } else {
-            filteredSubcategories = new Set(items.slice(1).map(item => item[subcategoryIndex]));
-        }
-
-        const subcategorySelect = document.getElementById('subcategorySelect');
-        subcategorySelect.innerHTML = '';
-        subcategorySelect.appendChild(createOption('All'));
-        filteredSubcategories.forEach(subcategory => {
-            subcategorySelect.appendChild(createOption(subcategory));
-        });
-
-        if (Array.from(filteredSubcategories).includes(selectedSubcategory)) {
-            subcategorySelect.value = selectedSubcategory;
-        } else {
-            selectedSubcategory = 'All';
-        }
+        const selectedSubcategory = document.getElementById('subcategorySelect').value;
 
         const gallery = document.getElementById('csvGallery');
         gallery.innerHTML = '';
+
         let itemCount = 0; // Initialize item count
         for (let i = 1; i < items.length; i++) {
-            if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
-                (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
-                const div = createCard(items[i]);
-                gallery.appendChild(div);
+            const item = items[i];
+            const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
+            const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
+
+            if (categoryMatch && subcategoryMatch) {
+                const card = createCard(item);
+                gallery.appendChild(card);
                 itemCount++; // Increment count for each displayed item
             }
         }
 
         // Update the item count display
-        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
-    }
-
-    function createOption(value) {
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = value;
-        return option;
-    }
-
-    function createLabel(text, htmlFor) {
-        const label = document.createElement('label');
-        label.textContent = text;
-        label.htmlFor = htmlFor;
-        return label;
+        document.getElementById('itemCount').textContent = `${itemCount} Found`;
     }
 
     function createCard(dataRowItems) {
@@ -147,14 +126,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         div.addEventListener('click', function() {
             const img = div.querySelector('img');
-            const modalImg = document.getElementById("img01");
-            const captionText = document.getElementById("caption");
-            
-            modal.style.display = "block"; 
-            modalImg.src = img.src;
-            captionText.innerHTML = img.alt;
-
-            document.body.classList.add('modal-open');
+            showModal(img.src, img.alt); // Show modal with image source and alt text
         });
 
         const contentDiv = createContentDiv(dataRowItems);
@@ -166,8 +138,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
+
         let img, title, sku;
-        
+
         dataRowItems.forEach((cell, cellIndex) => {
             if (headers[cellIndex] === 'Title') {
                 title = createParagraph(cell, 'title');
@@ -177,7 +150,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 img = createImage(cell);
             }
         });
-        
+
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
         contentDiv.appendChild(sku);
@@ -227,7 +200,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         // Update the item count display for search results
-        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
+        document.getElementById('itemCount').textContent = `${itemCount} Found`;
 
         timeout = setTimeout(function () {
             input.value = '';
@@ -236,14 +209,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Event listener for live search input
     document.getElementById("myInput").addEventListener('input', liveSearch);
-
-    // Modal structure for content
-    const modalContent = document.createElement('div');
-    modalContent.classList.add('modal-content');
-    modalContent.innerHTML = `
-        <span class="close">&times;</span>
-        <img id="img01" alt="">
-        <div id="caption"></div>
-    `;
-    modal.appendChild(modalContent);
 });
