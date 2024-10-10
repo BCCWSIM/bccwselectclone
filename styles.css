@@ -1,4 +1,4 @@
-body, html {
+html {
     height: 100%;
     font-family: "Inconsolata", "Arial", sans-serif;
     text-align: center;
@@ -121,7 +121,6 @@ label {
     flex-grow: 1; 
 }
 
-
 @media (max-width: 400px) {
     .card {
         max-width: calc(42% - 1px);
@@ -212,10 +211,17 @@ label {
 }
 
 .modal-content {
+    background-color: rgba(255, 255, 255, 0.9); /* Light background like the card */
+    border-radius: 15px; /* Match card border radius */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     max-width: 80%; 
     max-height: 65vh; 
     overflow: auto; 
     margin-top: 15%;
+    padding: 20px; /* Add padding for content */
+    display: flex; /* Ensure flex layout for consistent spacing */
+    flex-direction: column; /* Align items vertically */
+    text-align: center; /* Center text */
 }
 
 .modal-content img {
@@ -223,24 +229,28 @@ label {
     width: 80%; 
     display: block; 
     margin: auto; 
+    border-radius: 15px; /* Rounded corners for images */
 }
 
 .close {
     position: absolute;
     top: 20px;
     right: 30px;
-    color: white;
+    color: #009688; /* Match the card icon color */
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
 }
 
-.card {
-    transition: opacity 0.3s;
-}
-
 .modal-open .card {
     opacity: 0.3; 
+}
+
+/* Optional: Add some styles for any text inside the modal */
+.modal-content p, .modal-content h2, .modal-content h3 {
+    font-family: "Inconsolata", "Arial", sans-serif; /* Match font */
+    color: #333; /* Dark text for visibility */
+    margin: 10px 0; /* Spacing between elements */
 }
 
 /* Add any other styles here */
