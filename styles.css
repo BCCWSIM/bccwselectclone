@@ -222,7 +222,7 @@ label {
     flex-direction: column; /* Align items vertically */
     text-align: center; /* Center text */
     margin: auto; /* Center the content */
-    margin-top: 15%; /* Corrected typo here */
+    margin-top: 10%; /* Corrected typo here */
 }
 
 .modal-content img {
