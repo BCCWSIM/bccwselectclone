@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     // Modal initialization
     const modal = document.getElementById("myModal");
-    const closeModalButton = document.getElementsByClassName("close")[0];
+    const closeModalButton = modal.querySelector(".close");
     modal.style.display = "none";
 
     closeModalButton.onclick = closeModal;
