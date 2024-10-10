@@ -5,7 +5,12 @@ html {
     background: #EDEDED;
 }
 
-.container, .logo-img-title-container, .input-details, .checkbox-group label, .logo-container, button {
+.container, 
+.logo-img-title-container, 
+.input-details, 
+.checkbox-group label, 
+.logo-container, 
+button {
     display: inherit;
     justify-content: center;
     border-radius: 5px;
@@ -16,7 +21,8 @@ html {
     max-height: calc(100% - 50px);
 }
 
-.logo-img-title-container, .logo-container {
+.logo-img-title-container, 
+.logo-container {
     flex-direction: row;
 }
 
@@ -26,7 +32,8 @@ html {
     fill: #009688 !important; 
 }
 
-.input-details, .checkbox-group label {
+.input-details, 
+.checkbox-group label {
     flex-direction: column;
 }
 
@@ -40,7 +47,8 @@ html {
     border-color: #007bff;
 }
 
-.logo1, .logo2 {
+.logo1, 
+.logo2 {
     flex: 2;
     max-width: 100%;
     max-height: 100px;
@@ -63,7 +71,9 @@ html {
     background-color: lightgreen;
 }
 
-input[type=text], input[type=datetime-local], input[type=number] {
+input[type=text], 
+input[type=datetime-local], 
+input[type=number] {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -74,7 +84,9 @@ input[type=text], input[type=datetime-local], input[type=number] {
     text-align: center;
 }
 
-input[type=text]:focus, input[type=datetime-local]:focus, input[type=number]:focus {
+input[type=text]:focus, 
+input[type=datetime-local]:focus, 
+input[type=number]:focus {
     border: 5px solid #555;
 }
 
@@ -83,30 +95,30 @@ label {
     margin-top: 20px;
 }
 
-#csvGallery, .csvGallery {
+#csvGallery, 
+.csvGallery {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
     margin: 5px;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 200px; /* Set a fixed width for the card */
-    height: 300px; /* Set a fixed height for the card */
+    width: 200px; /* Fixed width for the card */
+    height: 300px; /* Fixed height for the card */
     position: relative;
-    overflow: hidden; /* Ensure no overflow of content */
+    overflow: hidden; /* Prevent content overflow */
 }
 
 .card img {
-    max-width: 100%; /* Ensure the image does not exceed the width of the card */
+    max-width: 100%; /* Ensure image does not exceed card width */
     max-height: 55%; 
-    width: auto; 
-    height: auto;
     border-radius: 15px 15px 0 0; 
     flex-shrink: 0; 
 }
@@ -116,7 +128,7 @@ label {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: calc(100% - 65%); /* Adjust this based on image height */
+    height: calc(100% - 65%); /* Adjust based on image height */
     text-align: center;
     flex-grow: 1; 
 }
@@ -147,7 +159,8 @@ label {
     text-align: left;
 }
 
-#categorySelect, #subcategorySelect {
+#categorySelect, 
+#subcategorySelect {
     position: relative;
     z-index: 1;
     font-size: larger;
@@ -163,8 +176,8 @@ label {
     margin: 10px 0;
     color: #333; /* Adjust color as needed */
     text-align: left; /* Align text to the left */
-    width: 100%; /* Ensure it takes full width of its container */
-    padding-left: 10px; /* Optional: add some padding for better spacing */
+    width: 100%; /* Full width of container */
+    padding-left: 10px; /* Optional padding for better spacing */
 }
 
 #searchAndFilterContainer {
@@ -222,13 +235,13 @@ label {
     flex-direction: column; /* Align items vertically */
     text-align: center; /* Center text */
     margin: auto; /* Center the content */
-    margin-top: 10%; /* Corrected typo here */
+    margin-top: 10%; /* Add margin from the top */
 }
 
 .modal-content img {
     max-height: 65vh; 
     max-width: 100%; /* Change width to max-width */
-    height: auto; /* Set height to auto to maintain aspect ratio */
+    height: auto; /* Maintain aspect ratio */
     display: block; 
     margin: auto; 
     border-radius: 15px; /* Rounded corners for images */
@@ -248,8 +261,10 @@ label {
     opacity: 0.3; 
 }
 
-/* Optional: Add some styles for any text inside the modal */
-.modal-content p, .modal-content h2, .modal-content h3 {
+/* Optional: Styles for text inside the modal */
+.modal-content p, 
+.modal-content h2, 
+.modal-content h3 {
     font-family: "Inconsolata", "Arial", sans-serif; /* Match font */
     color: #333; /* Dark text for visibility */
     margin: 10px 0; /* Spacing between elements */
