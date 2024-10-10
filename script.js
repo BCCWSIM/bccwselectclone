@@ -10,11 +10,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.body.classList.remove('modal-open');
     }
 
-    // Close modal when the close button is clicked
+    // Event listeners for closing the modal
     closeModalButton.addEventListener('click', closeModal);
-
-    // Close modal when clicking outside of it
-    window.addEventListener('click', function(event) {
+    window.addEventListener('click', (event) => {
         if (event.target === modal) {
             closeModal();
         }
@@ -43,7 +41,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             categorySelect.addEventListener('change', displayGallery);
             subcategorySelect.addEventListener('change', displayGallery);
 
-            // Insert the labels and dropdowns in the correct order
+            // Insert labels and dropdowns
             galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
             galleryContainer.appendChild(categorySelect);
             galleryContainer.appendChild(createLabel('Subcategory:', 'subcategorySelect'));
@@ -52,14 +50,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             // Add reset button
             const resetButton = document.createElement('button');
             resetButton.textContent = 'Reset';
-            resetButton.style.display = 'block';
-            resetButton.addEventListener('click', function() {
-                document.getElementById('categorySelect').value = 'All';
-                document.getElementById('subcategorySelect').value = 'All';
-                displayGallery(); // Refresh the gallery after reset
+            resetButton.addEventListener('click', () => {
+                categorySelect.value = 'All';
+                subcategorySelect.value = 'All';
+                displayGallery(); // Refresh the gallery
             });
-
-            // Insert the reset button below the subcategory select
             galleryContainer.appendChild(resetButton);
 
             displayGallery(items); // Initially display all items
@@ -72,16 +67,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const select = document.createElement('select');
         select.id = id;
 
-        const allOption = document.createElement('option');
-        allOption.value = 'All';
-        allOption.textContent = 'All';
-        select.appendChild(allOption);
+        select.appendChild(createOption('All'));
 
         options.forEach(optionValue => {
-            const option = document.createElement('option');
-            option.value = optionValue;
-            option.textContent = optionValue;
-            select.appendChild(option);
+            select.appendChild(createOption(optionValue));
         });
 
         return select;
@@ -89,7 +78,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function displayGallery() {
         const selectedCategory = document.getElementById('categorySelect').value;
-        let selectedSubcategory = document.getElementById('subcategorySelect').value;
+        const subcategorySelect = document.getElementById('subcategorySelect');
+        let selectedSubcategory = subcategorySelect.value;
 
         let filteredSubcategories = new Set();
         if (selectedCategory !== 'All') {
@@ -102,22 +92,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             filteredSubcategories = new Set(items.slice(1).map(item => item[subcategoryIndex]));
         }
 
-        const subcategorySelect = document.getElementById('subcategorySelect');
-        subcategorySelect.innerHTML = '';
+        subcategorySelect.innerHTML = ''; // Clear current options
         subcategorySelect.appendChild(createOption('All'));
         filteredSubcategories.forEach(subcategory => {
             subcategorySelect.appendChild(createOption(subcategory));
         });
 
-        if (Array.from(filteredSubcategories).includes(selectedSubcategory)) {
-            subcategorySelect.value = selectedSubcategory;
-        } else {
-            selectedSubcategory = 'All';
-        }
+        selectedSubcategory = filteredSubcategories.has(selectedSubcategory) ? selectedSubcategory : 'All';
+        subcategorySelect.value = selectedSubcategory;
 
         const gallery = document.getElementById('csvGallery');
         gallery.innerHTML = '';
         let itemCount = 0; // Initialize item count
+
         for (let i = 1; i < items.length; i++) {
             if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
                 (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
@@ -145,46 +132,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return label;
     }
 
-function createCard(dataRowItems) {
-    const div = document.createElement('div');
-    div.classList.add('card');
+    function createCard(dataRowItems) {
+        const div = document.createElement('div');
+        div.classList.add('card');
 
-    let title; // Declare title variable
+        const title = dataRowItems[headers.indexOf('Title')];
 
-    // Retrieve the title from the current row
-    dataRowItems.forEach((cell, cellIndex) => {
-        if (headers[cellIndex] === 'Title') {
-            title = cell; // Assign the title here
-        }
-    });
+        div.addEventListener('click', function() {
+            const img = div.querySelector('img');
+            const modalImg = document.getElementById("img01");
+            const captionText = document.getElementById("caption");
 
-    div.addEventListener('click', function() {
-        const img = div.querySelector('img');
-        const modalImg = document.getElementById("img01");
-        const captionText = document.getElementById("caption");
+            modal.style.display = "block"; 
+            modalImg.src = img.src;
+            captionText.innerHTML = title;
 
-        modal.style.display = "block"; 
-        modalImg.src = img.src;
+            document.body.classList.add('modal-open');
+        });
 
-        // Set the caption to the title
-        captionText.innerHTML = title; // Use the title variable
-
-        document.body.classList.add('modal-open');
-    });
-
-    const contentDiv = createContentDiv(dataRowItems);
-    div.appendChild(contentDiv);
-    
-    return div;
-}
-
+        const contentDiv = createContentDiv(dataRowItems);
+        div.appendChild(contentDiv);
+        
+        return div;
+    }
 
     function createContentDiv(dataRowItems) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
+
         let img, title, sku;
-        
+
         dataRowItems.forEach((cell, cellIndex) => {
             if (headers[cellIndex] === 'Title') {
                 title = createParagraph(cell, 'title');
@@ -194,7 +172,7 @@ function createCard(dataRowItems) {
                 img = createImage(cell);
             }
         });
-        
+
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
         contentDiv.appendChild(sku);
@@ -228,27 +206,26 @@ function createCard(dataRowItems) {
         const cards = gallery.getElementsByClassName('card');
 
         let itemCount = 0; // Reset item count for search results
-        for (let i = 0; i < cards.length; i++) {
-            let title = cards[i].getElementsByClassName("title")[0];
-            let sku = cards[i].getElementsByClassName("sku")[0];
-            if (title || sku) {
-                let txtValueTitle = title ? title.textContent || title.innerText : '';
-                let txtValueSku = sku ? sku.textContent || sku.innerText : '';
-                if (txtValueTitle.toUpperCase().indexOf(filter) > -1 || txtValueSku.toUpperCase().indexOf(filter) > -1) {
-                    cards[i].style.display = "";
-                    itemCount++; // Increment count for displayed items
-                } else {
-                    cards[i].style.display = "none";
-                }
-            }       
-        }
+        Array.from(cards).forEach(card => {
+            const title = card.getElementsByClassName("title")[0];
+            const sku = card.getElementsByClassName("sku")[0];
+            const txtValueTitle = title ? title.textContent || title.innerText : '';
+            const txtValueSku = sku ? sku.textContent || sku.innerText : '';
+
+            if (txtValueTitle.toUpperCase().includes(filter) || txtValueSku.toUpperCase().includes(filter)) {
+                card.style.display = "";
+                itemCount++; // Increment count for displayed items
+            } else {
+                card.style.display = "none";
+            }
+        });
 
         // Update the item count display for search results
         document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
 
-        timeout = setTimeout(function () {
+        timeout = setTimeout(() => {
             input.value = '';
-        }, 1500); // Clear the input field 1.5 seconds after the user stops typing
+        }, 1500); // Clear input field 1.5 seconds after user stops typing
     }
 
     // Event listener for live search input
