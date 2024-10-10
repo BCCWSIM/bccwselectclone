@@ -227,7 +227,8 @@ label {
 
 .modal-content img {
     max-height: 65vh; 
-    width: 80%; 
+    max-width: 100%; /* Change width to max-width */
+    height: auto; /* Set height to auto to maintain aspect ratio */
     display: block; 
     margin: auto; 
     border-radius: 15px; /* Rounded corners for images */
