@@ -212,14 +212,14 @@ label {
 }
 
 .modal-content {
-    max-width: 90%; 
+    max-width: 80%; 
     max-height: 65vh; 
     overflow: auto; 
 }
 
 .modal-content img {
     max-height: 65vh; 
-    width: 90%; 
+    width: 80%; 
     display: block; 
     margin: auto; 
 }
