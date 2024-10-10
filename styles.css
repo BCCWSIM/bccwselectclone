@@ -215,6 +215,7 @@ label {
     max-width: 80%; 
     max-height: 65vh; 
     overflow: auto; 
+    margin-top: 15%;
 }
 
 .modal-content img {
