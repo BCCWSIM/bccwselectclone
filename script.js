@@ -145,26 +145,39 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return label;
     }
 
-    function createCard(dataRowItems) {
-        const div = document.createElement('div');
-        div.classList.add('card');
+function createCard(dataRowItems) {
+    const div = document.createElement('div');
+    div.classList.add('card');
 
-        div.addEventListener('click', function() {
-            const img = div.querySelector('img');
-            const modalImg = document.getElementById("img01");
-            const captionText = document.getElementById("caption");
-            
-            modal.style.display = "block"; 
-            modalImg.src = img.src;
-            captionText.innerHTML = img.alt;
+    let title; // Declare title variable
 
-            document.body.classList.add('modal-open');
-        });
+    // Retrieve the title from the current row
+    dataRowItems.forEach((cell, cellIndex) => {
+        if (headers[cellIndex] === 'Title') {
+            title = cell; // Assign the title here
+        }
+    });
 
-        const contentDiv = createContentDiv(dataRowItems);
-        div.appendChild(contentDiv);
-        return div;
-    }
+    div.addEventListener('click', function() {
+        const img = div.querySelector('img');
+        const modalImg = document.getElementById("img01");
+        const captionText = document.getElementById("caption");
+
+        modal.style.display = "block"; 
+        modalImg.src = img.src;
+
+        // Set the caption to the title
+        captionText.innerHTML = title; // Use the title variable
+
+        document.body.classList.add('modal-open');
+    });
+
+    const contentDiv = createContentDiv(dataRowItems);
+    div.appendChild(contentDiv);
+    
+    return div;
+}
+
 
     function createContentDiv(dataRowItems) {
         const contentDiv = document.createElement('div');
