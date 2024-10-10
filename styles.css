@@ -219,9 +219,9 @@ label {
 
 .modal-content img {
     max-height: 65vh; 
-    width: 100%; 
+    width: 90%; 
     display: block; 
-    margin: 0 auto; 
+    margin: auto; 
 }
 
 .close {
