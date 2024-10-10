@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     // Event listener for live search input
     document.getElementById("myInput").addEventListener('input', liveSearch);
 
-    // Modal structure for content
+    // Ensure modal content structure is set correctly
     const modalContent = document.createElement('div');
     modalContent.classList.add('modal-content');
     modalContent.innerHTML = `
