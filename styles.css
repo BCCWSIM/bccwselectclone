@@ -222,9 +222,8 @@ label {
     flex-direction: column; /* Align items vertically */
     text-align: center; /* Center text */
     margin: auto; /* Center the content */
-    marigin-top: 15%;
+    margin-top: 15%; /* Corrected typo here */
 }
-
 
 .modal-content img {
     max-height: 65vh; 
