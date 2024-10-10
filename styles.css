@@ -104,8 +104,8 @@ label {
 
 .card img {
     max-width: 100%; /* Ensure the image does not exceed the width of the card */
-    max-height: 65%; 
-    width: auto; 
+    max-height: 55%; 
+    width: 100%; 
     border-radius: 15px 15px 0 0; 
     flex-shrink: 0; 
 }
