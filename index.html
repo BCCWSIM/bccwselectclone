@@ -21,12 +21,9 @@
                         <img src="https://lh3.googleusercontent.com/d/19bi1iNE8JYD1kVJ3nGH0YevbPh-sdQ9b" class="logo1" alt="Logo 2">
                     </div>
                     <div id="searchAndFilterContainer">
-                            <!-- Add subcategory options here -->
-                        </select>
-
                         <input type="text" id="myInput" onkeyup="liveSearch()" placeholder="Search...">
                         <div id="galleryContainer"></div>
-                                               <div id="itemCount"><span id="countValue">0</span></div>
+                        <div id="itemCount"><span id="countValue">0</span></div>
                     </div>
                 </div>
                 <div class="w3-container w3-card w3-white">
@@ -37,9 +34,11 @@
     </div>
 
     <div id="myModal" class="modal">
-        <span class="close">×</span>
-        <img class="modal-content" id="img01">
-        <div id="caption"></div>
+        <div class="modal-content">
+            <span class="close">×</span>
+            <img class="modal-image" id="img01">
+            <div id="caption"></div>
+        </div>
     </div>
 
     <footer class="w3-container w3-teal w3-center w3-margin-top">
