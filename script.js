@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         // Update the item count display
-        document.getElementById('itemCount').textContent = `Items found: ${itemCount}`;
+        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
 
     function createOption(value) {
