@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             headers = items[0];
             skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
-            subcategoryIndex = headers.indexOf('Subcategory');
+            subcategoryIndex = headers.indexOf('SubCategory');
 
             // Populate categories and subcategories
             const categories = new Set(items.slice(1).map(item => item[categoryIndex] || '')); // Handle empty categories
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             // Insert labels and dropdowns
             galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
             galleryContainer.appendChild(categorySelect);
-            galleryContainer.appendChild(createLabel('Subcategory:', 'subcategorySelect'));
+            galleryContainer.appendChild(createLabel('SubCategory:', 'subcategorySelect'));
             galleryContainer.appendChild(subcategorySelect);
 
             // Add reset button
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         for (let i = 1; i < items.length; i++) {
             if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
-                (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
+                (selectedSubCategory === 'All' || items[i][subcategoryIndex] === selectedSubCategory)) {
                 const div = createCard(items[i]);
                 gallery.appendChild(div);
                 itemCount++; // Increment count for each displayed item
