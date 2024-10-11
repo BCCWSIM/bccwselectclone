@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetch('Resources.csv')
         .then(response => response.text())
         .then(csvData => {
+            // Replace %23 with #
+            csvData = csvData.replace(/%23/g, '#');
+
             items = csvData.split('\n')
                 .filter(row => row.trim().length > 0)
                 .map(row => row.split(',').map(cell => cell.trim()));
