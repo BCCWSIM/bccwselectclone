@@ -240,7 +240,7 @@ label {
     flex-direction: column; /* Align items vertically */
     text-align: center; /* Center text */
     margin: auto; /* Center the content */
-    margin-top: 20%; /* Add margin from the top */
+    margin-top: 10%; /* Add margin from the top */
 }
 
 .modal-content img {
