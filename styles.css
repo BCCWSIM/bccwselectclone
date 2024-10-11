@@ -135,7 +135,6 @@ label {
     flex-grow: 1; 
 }
 
-
 @media (max-width: 400px) {
     .card {
         max-width: calc(42% - 1px);
@@ -271,6 +270,31 @@ label {
     font-family: "Inconsolata", "Arial", sans-serif; /* Match font */
     color: #333; /* Dark text for visibility */
     margin: 10px 0; /* Spacing between elements */
+}
+
+/* Custom scrollbar styles for Webkit browsers */
+::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #EDEDED; /* Color of the scrollbar track */
+    border-radius: 10px; /* Rounded corners for the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #009688; /* Color of the scrollbar handle */
+    border-radius: 10px; /* Rounded corners for the handle */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #007b5f; /* Darker color on hover */
+}
+
+/* Custom scrollbar styles for Firefox */
+* {
+    scrollbar-width: thin; /* Change to 'auto' for default scrollbar */
+    scrollbar-color: #009688 #EDEDED; /* Handle color and track color */
 }
 
 /* Add any other styles here */
