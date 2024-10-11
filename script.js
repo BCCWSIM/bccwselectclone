@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Fetch CSV data and set up gallery
     let items = [];
-    let headers, skuIndex, quantityIndex, categoryIndex, subcategoryIndex;
+    let headers, skuIndex, categoryIndex, subcategoryIndex;
 
     fetch('Resources.csv')
         .then(response => response.text())
@@ -28,20 +28,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
             // Replace %23 with #
             csvData = csvData.replace(/%23/g, '#');
 
+            // Use a regex to handle CSV parsing with quotes
             items = csvData.split('\n')
                 .filter(row => row.trim().length > 0)
-                .map(row => row.split(',').map(cell => cell.trim()));
+                .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(cell => cell.replace(/^"|"$/g, '').trim()));
 
             headers = items[0];
 
-            // Find the indices we need, including Quantity
+            // Find the indices we need, ignoring extra columns
             skuIndex = headers.indexOf('SKU');
-            quantityIndex = headers.indexOf('Quantity'); // New index
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
 
             // Ensure that the relevant headers exist
-            if (skuIndex === -1 || quantityIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
+            if (skuIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
                 console.error('Required headers not found.');
                 return;
             }
@@ -96,8 +96,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function displayGallery() {
         const selectedCategory = document.getElementById('categorySelect').value;
-        const subcategorySelect = document.getElementById('subcategorySelect');
-        let selectedSubcategory = subcategorySelect.value;
+        const selectedSubcategory = document.getElementById('subcategorySelect').value;
 
         const gallery = document.getElementById('csvGallery');
         gallery.innerHTML = '';
@@ -137,7 +136,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         div.classList.add('card');
 
         const title = dataRowItems[headers.indexOf('Title')];
-        const quantity = dataRowItems[quantityIndex]; // Access quantity
 
         div.addEventListener('click', function() {
             const img = div.querySelector('img');
@@ -146,7 +144,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             modal.style.display = "block"; 
             modalImg.src = img.src;
-            captionText.innerHTML = `${title} (Qty: ${quantity})`; // Show quantity in caption
+            captionText.innerHTML = title;
 
             document.body.classList.add('modal-open');
         });
@@ -162,15 +160,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
 
-        let img, title, sku, quantity;
+        let img, title, sku;
 
         dataRowItems.forEach((cell, cellIndex) => {
             if (headers[cellIndex] === 'Title') {
                 title = createParagraph(cell, 'title');
             } else if (headers[cellIndex] === 'SKU') {
                 sku = createParagraph(cell, 'sku');
-            } else if (headers[cellIndex] === 'Quantity') {
-                quantity = createParagraph(cell, 'quantity'); // New paragraph for quantity
             } else if (cellIndex === 0) { // Assuming the first column is the image URL
                 img = createImage(cell);
             }
@@ -179,7 +175,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
         contentDiv.appendChild(sku);
-        contentDiv.appendChild(quantity); // Append quantity
         return contentDiv;
     }
 
