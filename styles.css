@@ -135,6 +135,13 @@ label {
     flex-grow: 1; 
 }
 
+.card > div > .sku {
+    position: absolute; /* Position it absolutely within the card */
+    bottom: 10px; /* Distance from the bottom */
+    right: 10px; /* Distance from the right */
+    font-size: 0.7em; /* Adjust the font size if needed */
+}
+
 @media (max-width: 400px) {
     .card {
         max-width: calc(42% - 1px);
@@ -204,11 +211,6 @@ label {
 .w3-third {
     width: auto; 
     display: inline-block; 
-}
-
-.card > div > .sku {
-    align-self: flex-end; 
-    font-size: 0.7em;
 }
 
 .modal {
