@@ -26,17 +26,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
         .then(response => response.text())
         .then(csvData => {
             items = csvData.split('\n')
-                .filter(row => row.trim().length > 0) // Ensure no empty rows
-                .map(row => row.split(',').map(cell => cell.trim())); // Trim each cell
+                .filter(row => row.trim().length > 0)
+                .map(row => row.split(',').map(cell => cell.trim()));
 
             headers = items[0];
             skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
 
+            // Log headers and indices for debugging
+            console.log(headers, skuIndex, categoryIndex, subcategoryIndex);
+
             // Populate categories and subcategories
-            const categories = new Set(items.slice(1).map(item => item[categoryIndex] || '')); // Handle empty categories
-            const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || '')); // Handle empty subcategories
+            const categories = new Set(items.slice(1).map(item => item[categoryIndex] || ''));
+            const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || ''));
 
             const galleryContainer = document.getElementById('galleryContainer');
             const categorySelect = createDropdown('categorySelect', categories);
@@ -57,7 +60,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             resetButton.addEventListener('click', () => {
                 categorySelect.value = 'All';
                 subcategorySelect.value = 'All';
-                displayGallery(); // Refresh the gallery
+                displayGallery();
             });
             galleryContainer.appendChild(resetButton);
 
@@ -74,7 +77,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         select.appendChild(createOption('All'));
 
         options.forEach(optionValue => {
-            if (optionValue) { // Only add non-empty options
+            if (optionValue) {
                 select.appendChild(createOption(optionValue));
             }
         });
@@ -82,46 +85,44 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return select;
     }
 
-function displayGallery() {
-    const selectedCategory = document.getElementById('categorySelect').value;
-    const subcategorySelect = document.getElementById('subcategorySelect');
-    let selectedSubcategory = subcategorySelect.value; // Ensure consistent naming
+    function displayGallery() {
+        const selectedCategory = document.getElementById('categorySelect').value;
+        const subcategorySelect = document.getElementById('subcategorySelect');
+        let selectedSubcategory = subcategorySelect.value;
 
-    let filteredSubcategories = new Set();
-    for (let i = 1; i < items.length; i++) {
-        const item = items[i];
-        if ((selectedCategory === 'All' || item[categoryIndex] === selectedCategory)) {
-            const subcategory = item[subcategoryIndex] || ''; // Handle empty subcategory
-            if (subcategory) {
-                filteredSubcategories.add(subcategory);
+        let filteredSubcategories = new Set();
+        for (let i = 1; i < items.length; i++) {
+            const item = items[i];
+            if ((selectedCategory === 'All' || item[categoryIndex] === selectedCategory)) {
+                const subcategory = item[subcategoryIndex] || '';
+                if (subcategory) {
+                    filteredSubcategories.add(subcategory);
+                }
             }
         }
-    }
 
-    // Update subcategory dropdown
-    subcategorySelect.innerHTML = ''; // Clear current options
-    subcategorySelect.appendChild(createOption('All'));
-    filteredSubcategories.forEach(subcategory => {
-        subcategorySelect.appendChild(createOption(subcategory));
-    });
+        // Update subcategory dropdown
+        subcategorySelect.innerHTML = '';
+        subcategorySelect.appendChild(createOption('All'));
+        filteredSubcategories.forEach(subcategory => {
+            subcategorySelect.appendChild(createOption(subcategory));
+        });
 
-    const gallery = document.getElementById('csvGallery');
-    gallery.innerHTML = '';
-    let itemCount = 0; // Initialize item count
+        const gallery = document.getElementById('csvGallery');
+        gallery.innerHTML = '';
+        let itemCount = 0;
 
-    for (let i = 1; i < items.length; i++) {
-        if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
-            (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
-            const div = createCard(items[i]);
-            gallery.appendChild(div);
-            itemCount++; // Increment count for each displayed item
+        for (let i = 1; i < items.length; i++) {
+            if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
+                (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
+                const div = createCard(items[i]);
+                gallery.appendChild(div);
+                itemCount++;
+            }
         }
+
+        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
-
-    // Update the item count display
-    document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
-}
-
 
     function createOption(value) {
         const option = document.createElement('option');
@@ -210,7 +211,7 @@ function displayGallery() {
         const gallery = document.getElementById('csvGallery');
         const cards = gallery.getElementsByClassName('card');
 
-        let itemCount = 0; // Reset item count for search results
+        let itemCount = 0; 
         Array.from(cards).forEach(card => {
             const title = card.getElementsByClassName("title")[0];
             const sku = card.getElementsByClassName("sku")[0];
@@ -219,18 +220,17 @@ function displayGallery() {
 
             if (txtValueTitle.toUpperCase().includes(filter) || txtValueSku.toUpperCase().includes(filter)) {
                 card.style.display = "";
-                itemCount++; // Increment count for displayed items
+                itemCount++;
             } else {
                 card.style.display = "none";
             }
         });
 
-        // Update the item count display for search results
         document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
 
         timeout = setTimeout(() => {
             input.value = '';
-        }, 1500); // Clear input field 1.5 seconds after user stops typing
+        }, 1500);
     }
 
     // Event listener for live search input
