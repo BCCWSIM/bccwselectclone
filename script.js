@@ -82,45 +82,46 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return select;
     }
 
-    function displayGallery() {
-        const selectedCategory = document.getElementById('categorySelect').value;
-        const subcategorySelect = document.getElementById('subcategorySelect');
-        let selectedSubcategory = subcategorySelect.value;
+function displayGallery() {
+    const selectedCategory = document.getElementById('categorySelect').value;
+    const subcategorySelect = document.getElementById('subcategorySelect');
+    let selectedSubcategory = subcategorySelect.value; // Ensure consistent naming
 
-        let filteredSubcategories = new Set();
-        for (let i = 1; i < items.length; i++) {
-            const item = items[i];
-            if ((selectedCategory === 'All' || item[categoryIndex] === selectedCategory)) {
-                const subcategory = item[subcategoryIndex] || ''; // Handle empty subcategory
-                if (subcategory) {
-                    filteredSubcategories.add(subcategory);
-                }
+    let filteredSubcategories = new Set();
+    for (let i = 1; i < items.length; i++) {
+        const item = items[i];
+        if ((selectedCategory === 'All' || item[categoryIndex] === selectedCategory)) {
+            const subcategory = item[subcategoryIndex] || ''; // Handle empty subcategory
+            if (subcategory) {
+                filteredSubcategories.add(subcategory);
             }
         }
-
-        // Update subcategory dropdown
-        subcategorySelect.innerHTML = ''; // Clear current options
-        subcategorySelect.appendChild(createOption('All'));
-        filteredSubcategories.forEach(subcategory => {
-            subcategorySelect.appendChild(createOption(subcategory));
-        });
-
-        const gallery = document.getElementById('csvGallery');
-        gallery.innerHTML = '';
-        let itemCount = 0; // Initialize item count
-
-        for (let i = 1; i < items.length; i++) {
-            if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
-                (selectedSubCategory === 'All' || items[i][subcategoryIndex] === selectedSubCategory)) {
-                const div = createCard(items[i]);
-                gallery.appendChild(div);
-                itemCount++; // Increment count for each displayed item
-            }
-        }
-
-        // Update the item count display
-        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
+
+    // Update subcategory dropdown
+    subcategorySelect.innerHTML = ''; // Clear current options
+    subcategorySelect.appendChild(createOption('All'));
+    filteredSubcategories.forEach(subcategory => {
+        subcategorySelect.appendChild(createOption(subcategory));
+    });
+
+    const gallery = document.getElementById('csvGallery');
+    gallery.innerHTML = '';
+    let itemCount = 0; // Initialize item count
+
+    for (let i = 1; i < items.length; i++) {
+        if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
+            (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
+            const div = createCard(items[i]);
+            gallery.appendChild(div);
+            itemCount++; // Increment count for each displayed item
+        }
+    }
+
+    // Update the item count display
+    document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
+}
+
 
     function createOption(value) {
         const option = document.createElement('option');
