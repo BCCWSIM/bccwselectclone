@@ -33,16 +33,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 .map(row => row.split(',').map(cell => cell.trim()));
 
             headers = items[0];
-            // Find the indices we need and ignore extra columns
             skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
 
-            // Ensure that the relevant headers exist
-            if (skuIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
-                console.error('Required headers not found.');
-                return;
-            }
+            // Log headers and indices for debugging
+            console.log(headers, skuIndex, categoryIndex, subcategoryIndex);
 
             // Populate categories and subcategories
             const categories = new Set(items.slice(1).map(item => item[categoryIndex] || ''));
@@ -179,7 +175,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         dataRowItems.forEach((cell, cellIndex) => {
             if (headers[cellIndex] === 'Title') {
                 title = createParagraph(cell, 'title');
-            } else if (headers[cellIndex] === 'SKU') {
+            } else if (['SKU', 'ID'].includes(headers[cellIndex])) {
                 sku = createParagraph(cell, 'sku');
             } else if (cellIndex === 0) {
                 img = createImage(cell);
