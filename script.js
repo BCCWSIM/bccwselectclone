@@ -28,9 +28,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
             // Replace %23 with #
             csvData = csvData.replace(/%23/g, '#');
 
+            // Use a regex to handle CSV parsing with quotes
             items = csvData.split('\n')
                 .filter(row => row.trim().length > 0)
-                .map(row => row.split(',').map(cell => cell.trim()));
+                .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(cell => cell.replace(/^"|"$/g, '').trim()));
 
             headers = items[0];
 
@@ -95,8 +96,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     function displayGallery() {
         const selectedCategory = document.getElementById('categorySelect').value;
-        const subcategorySelect = document.getElementById('subcategorySelect');
-        let selectedSubcategory = subcategorySelect.value;
+        const selectedSubcategory = document.getElementById('subcategorySelect').value;
 
         const gallery = document.getElementById('csvGallery');
         gallery.innerHTML = '';
