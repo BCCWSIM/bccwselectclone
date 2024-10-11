@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             headers = items[0];
 
-            // Find the indices we need, ignoring any extra columns
+            // Find the indices we need, ignoring extra columns
             skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
@@ -98,32 +98,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const subcategorySelect = document.getElementById('subcategorySelect');
         let selectedSubcategory = subcategorySelect.value;
 
-        let filteredSubcategories = new Set();
-        for (let i = 1; i < items.length; i++) {
-            const item = items[i];
-            if ((selectedCategory === 'All' || item[categoryIndex] === selectedCategory)) {
-                const subcategory = item[subcategoryIndex] || '';
-                if (subcategory) {
-                    filteredSubcategories.add(subcategory);
-                }
-            }
-        }
-
-        // Update subcategory dropdown
-        subcategorySelect.innerHTML = '';
-        subcategorySelect.appendChild(createOption('All'));
-        filteredSubcategories.forEach(subcategory => {
-            subcategorySelect.appendChild(createOption(subcategory));
-        });
-
         const gallery = document.getElementById('csvGallery');
         gallery.innerHTML = '';
         let itemCount = 0;
 
         for (let i = 1; i < items.length; i++) {
-            if ((selectedCategory === 'All' || items[i][categoryIndex] === selectedCategory) &&
-                (selectedSubcategory === 'All' || items[i][subcategoryIndex] === selectedSubcategory)) {
-                const div = createCard(items[i]);
+            const item = items[i];
+            const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
+            const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
+
+            if (categoryMatch && subcategoryMatch) {
+                const div = createCard(item);
                 gallery.appendChild(div);
                 itemCount++;
             }
