@@ -117,21 +117,24 @@ label {
 }
 
 .card img {
-    max-width: 100%; /* Ensure image does not exceed card width */
-    max-height: 55%; 
+    width: 100%; /* Ensure image does not exceed card width */
+    height: 150px; /* Fixed height for image */
+    object-fit: contain; /* Ensure image is contained */
     border-radius: 15px 15px 0 0; 
     flex-shrink: 0; 
+    display: block; /* Ensure it takes up space */
 }
 
 .card > div {
     padding: 5px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: calc(100% - 65%); /* Adjust based on image height */
+    justify-content: flex-start; /* Start aligning titles */
+    height: calc(100% - 150px); /* Adjust based on image height */
     text-align: center;
     flex-grow: 1; 
 }
+
 
 @media (max-width: 400px) {
     .card {
