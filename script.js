@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // Add SKU count display
         const skuCountDiv = document.createElement('div');
         skuCountDiv.classList.add('sku-count');
-        skuCountDiv.textContent = `${skuCount} similar items`;
+        skuCountDiv.textContent = `${skuCount} Available `;
         skuCountDiv.style.textAlign = 'left'; // Align text to the left
         skuCountDiv.style.marginTop = 'auto'; // Push it to the bottom of the card
         div.appendChild(skuCountDiv); // Append SKU count to card
