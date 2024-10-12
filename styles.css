@@ -233,7 +233,7 @@ label {
     border-radius: 15px; /* Match card border radius */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     max-width: 90%; 
-    height: 60%; /* Set height to 60% of the viewport height */
+    max-height: 45%; /* Set height to 60% of the viewport height */
     overflow: auto; 
     padding: 20px; /* Add padding for content */
     display: flex; /* Ensure flex layout for consistent spacing */
