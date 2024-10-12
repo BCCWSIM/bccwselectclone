@@ -25,17 +25,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetch('Resources.csv')
         .then(response => response.text())
         .then(csvData => {
-            // Replace %23 with #
             csvData = csvData.replace(/%23/g, '#');
 
-            // Use a regex to handle CSV parsing with quotes
             items = csvData.split('\n')
                 .filter(row => row.trim().length > 0)
                 .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(cell => cell.replace(/^"|"$/g, '').trim()));
 
             headers = items[0];
 
-            // Find the indices we need
             skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
@@ -45,7 +42,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 return;
             }
 
-            // Populate categories and subcategories
             const categories = new Set(items.slice(1).map(item => item[categoryIndex] || ''));
             const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || ''));
 
@@ -56,13 +52,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             categorySelect.addEventListener('change', displayGallery);
             subcategorySelect.addEventListener('change', displayGallery);
 
-            // Insert labels and dropdowns
             galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
             galleryContainer.appendChild(categorySelect);
             galleryContainer.appendChild(createLabel('SubCategory:', 'subcategorySelect'));
             galleryContainer.appendChild(subcategorySelect);
 
-            // Add reset button
             const resetButton = document.createElement('button');
             resetButton.textContent = 'Reset';
             resetButton.addEventListener('click', () => {
@@ -72,7 +66,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
             galleryContainer.appendChild(resetButton);
 
-            displayGallery(); // Initially display all items
+            displayGallery();
             document.getElementById('csvGallery').style.display = 'flex';
         })
         .catch(error => console.error('Error fetching CSV:', error));
@@ -98,7 +92,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         gallery.innerHTML = '';
         let itemCount = 0;
 
-        // Create a Map to group items by SKU and count them
         const skuGroups = new Map();
 
         for (let i = 1; i < items.length; i++) {
@@ -111,15 +104,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 if (!skuGroups.has(sku)) {
                     skuGroups.set(sku, {
                         count: 1,
-                        item: item // Store the first matching item
+                        item: item
                     });
                 } else {
-                    skuGroups.get(sku).count++; // Increment count for existing SKU
+                    skuGroups.get(sku).count++;
                 }
             }
         }
 
-        // Create cards for each SKU group
         skuGroups.forEach(({ count, item }) => {
             const div = createCard(item, count);
             gallery.appendChild(div);
@@ -147,13 +139,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.body.classList.add('modal-open');
         });
 
-        const contentDiv = createContentDiv(dataRowItems, skuCount);
+        const contentDiv = createContentDiv(dataRowItems);
         div.appendChild(contentDiv);
+
+        // Add SKU count display
+        const skuCountDiv = document.createElement('div');
+        skuCountDiv.classList.add('sku-count');
+        skuCountDiv.textContent = `${skuCount} Available`; // Changed to 'Available'
+        div.appendChild(skuCountDiv); // Append SKU count to card
+
+        // Add SKU display
+        const skuDiv = document.createElement('div');
+        skuDiv.classList.add('sku');
+        skuDiv.textContent = `SKU: ${dataRowItems[headers.indexOf('SKU')]}`; // SKU display
+        div.appendChild(skuDiv); // Append SKU to card
 
         return div;
     }
 
-    function createContentDiv(dataRowItems, skuCount) {
+    function createContentDiv(dataRowItems) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
@@ -170,13 +174,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
-
-        // Create SKU count element
-        const skuCountDiv = document.createElement('div');
-        skuCountDiv.classList.add('sku-count');
-        skuCountDiv.textContent = `${skuCount} similar items`;
-        contentDiv.appendChild(skuCountDiv); // Append SKU count below the title
-
         return contentDiv;
     }
 
