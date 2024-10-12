@@ -98,8 +98,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         gallery.innerHTML = '';
         let itemCount = 0;
 
+        // Create a Map to group items by SKU and count them
         const skuGroups = new Map();
-        const skuCounts = new Map();
 
         for (let i = 1; i < items.length; i++) {
             const item = items[i];
@@ -109,16 +109,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (categoryMatch && subcategoryMatch) {
                 const sku = item[skuIndex];
                 if (!skuGroups.has(sku)) {
-                    skuGroups.set(sku, item);
-                    skuCounts.set(sku, 1);
+                    skuGroups.set(sku, {
+                        count: 1,
+                        item: item // Store the first matching item
+                    });
                 } else {
-                    skuCounts.set(sku, skuCounts.get(sku) + 1);
+                    skuGroups.get(sku).count++; // Increment count for existing SKU
                 }
             }
         }
 
-        skuGroups.forEach((item, sku) => {
-            const div = createCard(item, skuCounts.get(sku));
+        // Create cards for each SKU group
+        skuGroups.forEach(({ count, item }) => {
+            const div = createCard(item, count);
             gallery.appendChild(div);
             itemCount++;
         });
@@ -152,6 +155,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         skuCountDiv.classList.add('sku-count');
         skuCountDiv.textContent = `${skuCount} similar items`;
         skuCountDiv.style.textAlign = 'left'; // Align text to the left
+        skuCountDiv.style.marginTop = 'auto'; // Push it to the bottom of the card
         div.appendChild(skuCountDiv); // Append SKU count to card
 
         return div;
@@ -162,13 +166,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
 
-        let img, title, sku;
+        let img, title;
 
         dataRowItems.forEach((cell, cellIndex) => {
             if (headers[cellIndex] === 'Title') {
                 title = createParagraph(cell, 'title');
-            } else if (headers[cellIndex] === 'SKU') {
-                sku = createParagraph(cell, 'sku');
             } else if (cellIndex === 0) { // Assuming the first column is the image URL
                 img = createImage(cell);
             }
@@ -176,7 +178,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
-        contentDiv.appendChild(sku);
         return contentDiv;
     }
 
@@ -223,11 +224,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let itemCount = 0; 
         Array.from(cards).forEach(card => {
             const title = card.getElementsByClassName("title")[0];
-            const sku = card.getElementsByClassName("sku")[0];
             const txtValueTitle = title ? title.textContent || title.innerText : '';
-            const txtValueSku = sku ? sku.textContent || sku.innerText : '';
 
-            if (txtValueTitle.toUpperCase().includes(filter) || txtValueSku.toUpperCase().includes(filter)) {
+            if (txtValueTitle.toUpperCase().includes(filter)) {
                 card.style.display = "";
                 itemCount++;
             } else {
