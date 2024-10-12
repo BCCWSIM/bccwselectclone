@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Fetch CSV data and set up gallery
     let items = [];
-    let headers, skuIndex, categoryIndex, subcategoryIndex;
+    let headers, skuIndex, idIndex, categoryIndex, subcategoryIndex;
 
     fetch('Resources.csv')
         .then(response => response.text())
@@ -33,11 +33,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             headers = items[0];
 
-            skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
+            idIndex = headers.indexOf('ID'); // Adjusted to be after SubCategory
+            skuIndex = headers.indexOf('SKU');
 
-            if (skuIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
+            if (idIndex === -1 || skuIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
                 console.error('Required headers not found.');
                 return;
             }
@@ -169,11 +170,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
         availableCountDiv.textContent = `${skuCount} Available`; // 'Available' text
         contentDiv.appendChild(availableCountDiv); // Append count to content
 
-        // Add SKU display
+        // Add ID and SKU display
+        const idDiv = document.createElement('div');
+        idDiv.classList.add('id');
+        idDiv.textContent = dataRowItems[idIndex]; // ID display
+
         const skuDiv = document.createElement('div');
         skuDiv.classList.add('sku');
-        skuDiv.textContent = dataRowItems[headers.indexOf('SKU')]; // SKU without "SKU:" header
-        contentDiv.appendChild(skuDiv); // Append SKU to content
+        skuDiv.textContent = dataRowItems[skuIndex]; // SKU without "SKU:" header
+
+        const bottomRightDiv = document.createElement('div');
+        bottomRightDiv.classList.add('bottom-right');
+        bottomRightDiv.appendChild(idDiv);
+        bottomRightDiv.appendChild(skuDiv);
+
+        contentDiv.appendChild(bottomRightDiv); // Append ID and SKU to content
 
         return contentDiv;
     }
