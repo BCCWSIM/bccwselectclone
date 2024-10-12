@@ -147,21 +147,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.body.classList.add('modal-open');
         });
 
-        const contentDiv = createContentDiv(dataRowItems);
+        const contentDiv = createContentDiv(dataRowItems, skuCount);
         div.appendChild(contentDiv);
-
-        // Add SKU count display
-        const skuCountDiv = document.createElement('div');
-        skuCountDiv.classList.add('sku-count');
-        skuCountDiv.textContent = `${skuCount} Available `;
-        skuCountDiv.style.textAlign = 'left'; // Align text to the left
-        skuCountDiv.style.marginTop = 'auto'; // Push it to the bottom of the card
-        div.appendChild(skuCountDiv); // Append SKU count to card
 
         return div;
     }
 
-    function createContentDiv(dataRowItems) {
+    function createContentDiv(dataRowItems, skuCount) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
@@ -178,6 +170,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
+
+        // Create SKU count element
+        const skuCountDiv = document.createElement('div');
+        skuCountDiv.classList.add('sku-count');
+        skuCountDiv.textContent = `${skuCount} similar items`;
+        contentDiv.appendChild(skuCountDiv); // Append SKU count below the title
+
         return contentDiv;
     }
 
