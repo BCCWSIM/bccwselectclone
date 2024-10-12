@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
+        contentDiv.style.position = 'relative'; // Allow absolute positioning for children
 
         let img, title;
 
@@ -179,12 +180,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         skuDiv.classList.add('sku');
         skuDiv.textContent = dataRowItems[skuIndex]; // SKU without "SKU:" header
 
-        const bottomRightDiv = document.createElement('div');
-        bottomRightDiv.classList.add('bottom-right');
-        bottomRightDiv.appendChild(idDiv);
-        bottomRightDiv.appendChild(skuDiv);
+        // Positioning bottom right
+        const bottomDiv = document.createElement('div');
+        bottomDiv.style.display = 'flex';
+        bottomDiv.style.justifyContent = 'space-between'; // Distribute space between elements
+        bottomDiv.style.position = 'absolute'; // Position relative to contentDiv
+        bottomDiv.style.bottom = '10px'; // Adjust as needed
+        bottomDiv.style.left = '0';
+        bottomDiv.style.right = '0';
 
-        contentDiv.appendChild(bottomRightDiv); // Append ID and SKU to content
+        // Adjust sizes
+        idDiv.style.fontSize = 'small'; // Adjust font size for ID
+        skuDiv.style.fontSize = 'x-small'; // Adjust font size for SKU
+
+        bottomDiv.appendChild(skuDiv);
+        bottomDiv.appendChild(idDiv);
+
+        contentDiv.appendChild(bottomDiv); // Append ID and SKU to content
 
         return contentDiv;
     }
