@@ -35,12 +35,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             headers = items[0];
 
-            // Find the indices we need, ignoring extra columns
+            // Find the indices we need
             skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
 
-            // Ensure that the relevant headers exist
             if (skuIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
                 console.error('Required headers not found.');
                 return;
@@ -82,132 +81,52 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function createDropdown(id, options) {
         const select = document.createElement('select');
         select.id = id;
-
         select.appendChild(createOption('All'));
-
         options.forEach(optionValue => {
             if (optionValue) {
                 select.appendChild(createOption(optionValue));
             }
         });
-
         return select;
     }
 
-function displayGallery() {
-    const selectedCategory = document.getElementById('categorySelect').value;
-    const selectedSubcategory = document.getElementById('subcategorySelect').value;
+    function displayGallery() {
+        const selectedCategory = document.getElementById('categorySelect').value;
+        const selectedSubcategory = document.getElementById('subcategorySelect').value;
 
-    const gallery = document.getElementById('csvGallery');
-    gallery.innerHTML = '';
-    let itemCount = 0;
+        const gallery = document.getElementById('csvGallery');
+        gallery.innerHTML = '';
+        let itemCount = 0;
 
-    // Create a Map to group items by SKU and count similar items
-    const skuGroups = new Map();
-    const skuCounts = new Map();
+        const skuGroups = new Map();
+        const skuCounts = new Map();
 
-    for (let i = 1; i < items.length; i++) {
-        const item = items[i];
-        const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
-        const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
+        for (let i = 1; i < items.length; i++) {
+            const item = items[i];
+            const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
+            const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
 
-        if (categoryMatch && subcategoryMatch) {
-            const sku = item[skuIndex];
-            if (!skuGroups.has(sku)) {
-                skuGroups.set(sku, item); // Store the first matching item for this SKU
-                skuCounts.set(sku, 1); // Initialize count for this SKU
-            } else {
-                skuCounts.set(sku, skuCounts.get(sku) + 1); // Increment count
+            if (categoryMatch && subcategoryMatch) {
+                const sku = item[skuIndex];
+                if (!skuGroups.has(sku)) {
+                    skuGroups.set(sku, item);
+                    skuCounts.set(sku, 1);
+                } else {
+                    skuCounts.set(sku, skuCounts.get(sku) + 1);
+                }
             }
         }
+
+        skuGroups.forEach((item, sku) => {
+            const div = createCard(item, skuCounts.get(sku));
+            gallery.appendChild(div);
+            itemCount++;
+        });
+
+        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
 
-    // Create cards for the first item of each SKU group
-    skuGroups.forEach((item, sku) => {
-        const div = createCard(item, skuCounts.get(sku)); // Pass count to createCard
-        gallery.appendChild(div);
-        itemCount++;
-    });
-
-    document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
-}
-
-function createCard(dataRowItems, skuCount) {
-    const div = document.createElement('div');
-    div.classList.add('card');
-
-    const title = dataRowItems[headers.indexOf('Title')];
-
-    div.addEventListener('click', function() {
-        const img = div.querySelector('img');
-        const modalImg = document.getElementById("img01");
-        const captionText = document.getElementById("caption");
-
-        modal.style.display = "block"; 
-        modalImg.src = img.src;
-        captionText.innerHTML = title;
-
-        document.body.classList.add('modal-open');
-    });
-
-    const contentDiv = createContentDiv(dataRowItems);
-    div.appendChild(contentDiv);
-
-    // Add SKU count display
-    const skuCountDiv = document.createElement('div');
-    skuCountDiv.classList.add('sku-count');
-    skuCountDiv.textContent = `${skuCount} similar items`;
-    skuCountDiv.style.textAlign = 'left'; // Align text to the left
-    div.appendChild(skuCountDiv); // Append SKU count to card
-
-    return div;
-}
-
-// The rest of the code remains the same...
-
-
-function createCard(dataRowItems) {
-    const div = document.createElement('div');
-    div.classList.add('card');
-
-    const title = dataRowItems[headers.indexOf('Title')];
-
-    div.addEventListener('click', function() {
-        const img = div.querySelector('img');
-        const modalImg = document.getElementById("img01");
-        const captionText = document.getElementById("caption");
-
-        modal.style.display = "block"; 
-        modalImg.src = img.src;
-        captionText.innerHTML = title;
-
-        document.body.classList.add('modal-open');
-    });
-
-    const contentDiv = createContentDiv(dataRowItems);
-    div.appendChild(contentDiv);
-    
-    return div;
-}
-
-// The rest of the code remains the same...
-
-
-    function createOption(value) {
-        const option = document.createElement('option');
-        option.value = value;
-        option.textContent = value;
-        return option;
-    }
-
-    function createLabel(text, htmlFor) {
-        const label = document.createElement('label');
-        label.textContent = text;
-        label.htmlFor = htmlFor;
-        return label;
-    }
-
-    function createCard(dataRowItems) {
+    function createCard(dataRowItems, skuCount) {
         const div = document.createElement('div');
         div.classList.add('card');
 
@@ -227,7 +146,14 @@ function createCard(dataRowItems) {
 
         const contentDiv = createContentDiv(dataRowItems);
         div.appendChild(contentDiv);
-        
+
+        // Add SKU count display
+        const skuCountDiv = document.createElement('div');
+        skuCountDiv.classList.add('sku-count');
+        skuCountDiv.textContent = `${skuCount} similar items`;
+        skuCountDiv.style.textAlign = 'left'; // Align text to the left
+        div.appendChild(skuCountDiv); // Append SKU count to card
+
         return div;
     }
 
@@ -267,6 +193,20 @@ function createCard(dataRowItems) {
         p.textContent = cell;
         p.classList.add(className);
         return p;
+    }
+
+    function createOption(value) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        return option;
+    }
+
+    function createLabel(text, htmlFor) {
+        const label = document.createElement('label');
+        label.textContent = text;
+        label.htmlFor = htmlFor;
+        return label;
     }
 
     // Live search function
