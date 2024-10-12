@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Fetch CSV data and set up gallery
     let items = [];
-    let headers, skuIndex, categoryIndex, subcategoryIndex, idIndex;
+    let headers, skuIndex, idIndex, categoryIndex, subcategoryIndex;
 
     fetch('Resources.csv')
         .then(response => response.text())
@@ -33,12 +33,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             headers = items[0];
 
-            skuIndex = headers.indexOf('SKU');
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
-            idIndex = headers.indexOf('ID');
+            idIndex = headers.indexOf('ID'); // Adjusted to be after SubCategory
+            skuIndex = headers.indexOf('SKU');
 
-            if (skuIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1 || idIndex === -1) {
+            if (idIndex === -1 || skuIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
                 console.error('Required headers not found.');
                 return;
             }
@@ -67,11 +67,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
             galleryContainer.appendChild(resetButton);
 
-            displayGallery(); 
+            displayGallery();
             document.getElementById('csvGallery').style.display = 'flex';
         })
         .catch(error => console.error('Error fetching CSV:', error));
 
+    // Helper functions
     function createDropdown(id, options) {
         const select = document.createElement('select');
         select.id = id;
@@ -139,28 +140,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.body.classList.add('modal-open');
         });
 
-        const contentDiv = createContentDiv(dataRowItems);
+        const contentDiv = createContentDiv(dataRowItems, skuCount);
         div.appendChild(contentDiv);
-
-        // Add availability count display
-        const availabilityDiv = document.createElement('div');
-        availabilityDiv.classList.add('availability');
-        availabilityDiv.textContent = `${skuCount} Available`;
-        div.appendChild(availabilityDiv); // Append availability to card
-
-        // Add ID and SKU display
-        const idSkuDiv = document.createElement('div');
-        idSkuDiv.classList.add('id-sku');
-        const id = dataRowItems[idIndex];
-        const sku = dataRowItems[skuIndex];
-
-        idSkuDiv.innerHTML = `<span class="id">${id}</span><span class="sku">${sku}</span>`;
-        div.appendChild(idSkuDiv); // Append ID and SKU to card
 
         return div;
     }
 
-    function createContentDiv(dataRowItems) {
+    function createContentDiv(dataRowItems, skuCount) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
@@ -170,13 +156,36 @@ document.addEventListener('DOMContentLoaded', (event) => {
         dataRowItems.forEach((cell, cellIndex) => {
             if (headers[cellIndex] === 'Title') {
                 title = createParagraph(cell, 'title');
-            } else if (cellIndex === 0) {
+            } else if (cellIndex === 0) { // Assuming the first column is the image URL
                 img = createImage(cell);
             }
         });
 
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
+
+        // Add Available count below the title
+        const availableCountDiv = document.createElement('div');
+        availableCountDiv.classList.add('available-count');
+        availableCountDiv.textContent = `${skuCount} Available`; // 'Available' text
+        contentDiv.appendChild(availableCountDiv); // Append count to content
+
+        // Add ID and SKU display
+        const idDiv = document.createElement('div');
+        idDiv.classList.add('id');
+        idDiv.textContent = dataRowItems[idIndex]; // ID display
+
+        const skuDiv = document.createElement('div');
+        skuDiv.classList.add('sku');
+        skuDiv.textContent = dataRowItems[skuIndex]; // SKU without "SKU:" header
+
+        const bottomRightDiv = document.createElement('div');
+        bottomRightDiv.classList.add('bottom-right');
+        bottomRightDiv.appendChild(idDiv);
+        bottomRightDiv.appendChild(skuDiv);
+
+        contentDiv.appendChild(bottomRightDiv); // Append ID and SKU to content
+
         return contentDiv;
     }
 
@@ -209,6 +218,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return label;
     }
 
+    // Live search function
     let timeout = null;
 
     function liveSearch() {
@@ -239,5 +249,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }, 1500);
     }
 
+    // Event listener for live search input
     document.getElementById("myInput").addEventListener('input', liveSearch);
 });
