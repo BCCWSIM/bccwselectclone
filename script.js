@@ -139,25 +139,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.body.classList.add('modal-open');
         });
 
-        const contentDiv = createContentDiv(dataRowItems);
+        const contentDiv = createContentDiv(dataRowItems, skuCount);
         div.appendChild(contentDiv);
-
-        // Add SKU count display
-        const skuCountDiv = document.createElement('div');
-        skuCountDiv.classList.add('sku-count');
-        skuCountDiv.textContent = `${skuCount} Available`; // Changed to 'Available'
-        div.appendChild(skuCountDiv); // Append SKU count to card
-
-        // Add SKU display
-        const skuDiv = document.createElement('div');
-        skuDiv.classList.add('sku');
-        skuDiv.textContent = `SKU: ${dataRowItems[headers.indexOf('SKU')]}`; // SKU display
-        div.appendChild(skuDiv); // Append SKU to card
 
         return div;
     }
 
-    function createContentDiv(dataRowItems) {
+    function createContentDiv(dataRowItems, skuCount) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
@@ -174,6 +162,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         contentDiv.appendChild(img);
         contentDiv.appendChild(title);
+
+        // Add Available count below the title
+        const availableCountDiv = document.createElement('div');
+        availableCountDiv.classList.add('available-count');
+        availableCountDiv.textContent = `${skuCount} Available`; // 'Available' text
+        contentDiv.appendChild(availableCountDiv); // Append count to content
+
+        // Add SKU display
+        const skuDiv = document.createElement('div');
+        skuDiv.classList.add('sku');
+        skuDiv.textContent = dataRowItems[headers.indexOf('SKU')]; // SKU without "SKU:" header
+        contentDiv.appendChild(skuDiv); // Append SKU to content
+
         return contentDiv;
     }
 
