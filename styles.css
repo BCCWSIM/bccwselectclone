@@ -233,7 +233,7 @@ label {
     border-radius: 15px; /* Match card border radius */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     max-width: 70vh; 
-    max-height: 75vh; 
+    max-height: 55vh; 
     overflow: auto; 
     padding: 20px; /* Add padding for content */
     display: flex; /* Ensure flex layout for consistent spacing */
