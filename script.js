@@ -94,28 +94,66 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return select;
     }
 
-    function displayGallery() {
-        const selectedCategory = document.getElementById('categorySelect').value;
-        const selectedSubcategory = document.getElementById('subcategorySelect').value;
+function displayGallery() {
+    const selectedCategory = document.getElementById('categorySelect').value;
+    const selectedSubcategory = document.getElementById('subcategorySelect').value;
 
-        const gallery = document.getElementById('csvGallery');
-        gallery.innerHTML = '';
-        let itemCount = 0;
+    const gallery = document.getElementById('csvGallery');
+    gallery.innerHTML = '';
+    let itemCount = 0;
 
-        for (let i = 1; i < items.length; i++) {
-            const item = items[i];
-            const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
-            const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
+    // Create a Map to group items by SKU
+    const skuGroups = new Map();
 
-            if (categoryMatch && subcategoryMatch) {
-                const div = createCard(item);
-                gallery.appendChild(div);
-                itemCount++;
+    for (let i = 1; i < items.length; i++) {
+        const item = items[i];
+        const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
+        const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
+
+        if (categoryMatch && subcategoryMatch) {
+            const sku = item[skuIndex];
+            if (!skuGroups.has(sku)) {
+                skuGroups.set(sku, item); // Store the first matching item for this SKU
             }
         }
-
-        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
+
+    // Create cards for the first item of each SKU group
+    skuGroups.forEach((item) => {
+        const div = createCard(item);
+        gallery.appendChild(div);
+        itemCount++;
+    });
+
+    document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
+}
+
+function createCard(dataRowItems) {
+    const div = document.createElement('div');
+    div.classList.add('card');
+
+    const title = dataRowItems[headers.indexOf('Title')];
+
+    div.addEventListener('click', function() {
+        const img = div.querySelector('img');
+        const modalImg = document.getElementById("img01");
+        const captionText = document.getElementById("caption");
+
+        modal.style.display = "block"; 
+        modalImg.src = img.src;
+        captionText.innerHTML = title;
+
+        document.body.classList.add('modal-open');
+    });
+
+    const contentDiv = createContentDiv(dataRowItems);
+    div.appendChild(contentDiv);
+    
+    return div;
+}
+
+// The rest of the code remains the same...
+
 
     function createOption(value) {
         const option = document.createElement('option');
