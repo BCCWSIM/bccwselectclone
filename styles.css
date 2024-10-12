@@ -233,24 +233,24 @@ label {
     border-radius: 15px; /* Match card border radius */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     max-width: 70vh; 
-    max-height: 55vh; 
+    height: 60vh; /* Set height to 60% of the viewport height */
     overflow: auto; 
     padding: 20px; /* Add padding for content */
     display: flex; /* Ensure flex layout for consistent spacing */
     flex-direction: column; /* Align items vertically */
     text-align: center; /* Center text */
     margin: auto; /* Center the content */
-    margin-top: 10%; /* Add margin from the top */
 }
 
 .modal-content img {
     max-height: 100%; 
-    max-width: 80%; /* Change width to max-width */
+    max-width: 100%; /* Ensure the image doesn't exceed the modal content width */
     height: auto; /* Maintain aspect ratio */
     display: block; 
     margin: auto; 
     border-radius: 15px; /* Rounded corners for images */
 }
+
 
 .close {
     position: absolute;
