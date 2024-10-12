@@ -102,8 +102,9 @@ function displayGallery() {
     gallery.innerHTML = '';
     let itemCount = 0;
 
-    // Create a Map to group items by SKU
+    // Create a Map to group items by SKU and count similar items
     const skuGroups = new Map();
+    const skuCounts = new Map();
 
     for (let i = 1; i < items.length; i++) {
         const item = items[i];
@@ -114,19 +115,56 @@ function displayGallery() {
             const sku = item[skuIndex];
             if (!skuGroups.has(sku)) {
                 skuGroups.set(sku, item); // Store the first matching item for this SKU
+                skuCounts.set(sku, 1); // Initialize count for this SKU
+            } else {
+                skuCounts.set(sku, skuCounts.get(sku) + 1); // Increment count
             }
         }
     }
 
     // Create cards for the first item of each SKU group
-    skuGroups.forEach((item) => {
-        const div = createCard(item);
+    skuGroups.forEach((item, sku) => {
+        const div = createCard(item, skuCounts.get(sku)); // Pass count to createCard
         gallery.appendChild(div);
         itemCount++;
     });
 
     document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
 }
+
+function createCard(dataRowItems, skuCount) {
+    const div = document.createElement('div');
+    div.classList.add('card');
+
+    const title = dataRowItems[headers.indexOf('Title')];
+
+    div.addEventListener('click', function() {
+        const img = div.querySelector('img');
+        const modalImg = document.getElementById("img01");
+        const captionText = document.getElementById("caption");
+
+        modal.style.display = "block"; 
+        modalImg.src = img.src;
+        captionText.innerHTML = title;
+
+        document.body.classList.add('modal-open');
+    });
+
+    const contentDiv = createContentDiv(dataRowItems);
+    div.appendChild(contentDiv);
+
+    // Add SKU count display
+    const skuCountDiv = document.createElement('div');
+    skuCountDiv.classList.add('sku-count');
+    skuCountDiv.textContent = `${skuCount} similar items`;
+    skuCountDiv.style.textAlign = 'left'; // Align text to the left
+    div.appendChild(skuCountDiv); // Append SKU count to card
+
+    return div;
+}
+
+// The rest of the code remains the same...
+
 
 function createCard(dataRowItems) {
     const div = document.createElement('div');
