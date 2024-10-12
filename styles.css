@@ -215,6 +215,15 @@ label {
     color: #666; /* Color for SKU */
 }
 
+.card > div > .id {
+    position: absolute; /* Use absolute positioning */
+    bottom: 10px; /* Distance from the bottom */
+    left: 10px; /* Distance from the left */
+    font-size: 0.6em; /* Smaller font size for ID */
+    text-align: left; /* Align text to the left */
+    color: #666; /* Color for ID */
+}
+
 .card > div > .available-count {
     font-size: 0.9em; /* Slightly smaller font for available count */
     color: #666;      /* Lighter color for the available count */
