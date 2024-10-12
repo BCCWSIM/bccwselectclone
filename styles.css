@@ -244,7 +244,7 @@ label {
 }
 
 .modal-content img {
-    max-height: 65vh; 
+    max-height: 100%; 
     max-width: 80%; /* Change width to max-width */
     height: auto; /* Maintain aspect ratio */
     display: block; 
