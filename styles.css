@@ -103,8 +103,8 @@ label {
 }
 
 .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
-                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 
+                0 6px 20px rgba(0, 0, 0, 0.19);
     margin: 5px;
     border-radius: 15px;
     display: flex;
@@ -226,7 +226,7 @@ label {
 
 .card > div > .available-count {
     font-size: 0.9em; /* Slightly smaller font for available count */
-    color: #666;      /* Lighter color for the available count */
+    color: #666; /* Lighter color for the available count */
     margin-top: 5px; /* Space between title and count */
 }
 
@@ -249,7 +249,7 @@ label {
     border-radius: 15px; /* Match card border radius */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     max-width: 90%; 
-    height: 35vh; /* Set height to 60% of the viewport height */
+    height: 35vh; /* Set height to 35% of the viewport height */
     overflow: auto; 
     padding: 20px; /* Add padding for content */
     display: flex; /* Ensure flex layout for consistent spacing */
