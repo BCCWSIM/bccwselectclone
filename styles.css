@@ -210,24 +210,26 @@ label {
     position: absolute; /* Use absolute positioning */
     bottom: 10px; /* Distance from the bottom */
     right: 10px; /* Distance from the right */
-    font-size: 0.6em; /* Smaller font size for SKU */
+    font-size: 0.7em; /* Font size for SKU */
     text-align: right; /* Align text to the right */
-    color: #666; /* Color for SKU */
 }
 
-.card > div > .id {
-    position: absolute; /* Use absolute positioning */
+.id-sku {
+    position: absolute;
     bottom: 10px; /* Distance from the bottom */
-    left: 10px; /* Distance from the left */
-    font-size: 0.6em; /* Smaller font size for ID */
-    text-align: left; /* Align text to the left */
-    color: #666; /* Color for ID */
+    width: 100%; /* Full width for both ID and SKU */
+    display: flex; /* Flex layout for ID and SKU */
+    justify-content: space-between; /* Space between ID and SKU */
 }
 
-.card > div > .available-count {
-    font-size: 0.9em; /* Slightly smaller font for available count */
-    color: #666;      /* Lighter color for the available count */
-    margin-top: 5px; /* Space between title and count */
+.id {
+    font-size: 0.7em; /* Smaller font size for ID */
+    text-align: left; /* Align ID to the left */
+}
+
+.sku {
+    font-size: 0.7em; /* Smaller font size for SKU */
+    text-align: right; /* Align SKU to the right */
 }
 
 .modal {
