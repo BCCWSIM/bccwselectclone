@@ -1,13 +1,8 @@
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     // Modal initialization
     const modal = document.getElementById("myModal");
     const closeModalButton = modal.querySelector(".close");
     modal.style.display = "none";
-
-    function closeModal() {
-        modal.style.display = "none";
-        document.body.classList.remove('modal-open');
-    }
 
     closeModalButton.addEventListener('click', closeModal);
     window.addEventListener('click', (event) => {
@@ -16,93 +11,95 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    let items = [];
-    let headers, skuIndex, skuVarIndex, skuNameIndex, quantityLimitIndex, categoryIndex, subcategoryIndex;
+    // Close modal function
+    function closeModal() {
+        modal.style.display = "none";
+        document.body.classList.remove('modal-open');
+    }
 
+    let items = [];
+    let headers, indices = {};
+
+    // Fetch and parse CSV data
     fetch('Resources.csv')
         .then(response => response.text())
         .then(csvData => {
             items = csvData.split('\n')
                 .filter(row => row.trim().length > 0)
-                .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(cell => cell.replace(/^"|"$/g, '').trim()));
+                .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
+                .map(cell => cell.replace(/^"|"$/g, '').trim()));
 
             headers = items[0];
+            const requiredHeaders = ['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Category', 'SubCategory'];
 
-            skuIndex = headers.indexOf('SKU');
-            skuVarIndex = headers.indexOf('SKUVAR');
-            skuNameIndex = headers.indexOf('SKUName');
-            quantityLimitIndex = headers.indexOf('QuantityLimit');
-            categoryIndex = headers.indexOf('Category');
-            subcategoryIndex = headers.indexOf('SubCategory');
-
-            if (skuIndex === -1 || skuVarIndex === -1 || skuNameIndex === -1 || quantityLimitIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
-                console.error('Required headers not found.');
-                return;
-            }
-
-            const categories = new Set(items.slice(1).map(item => item[categoryIndex] || ''));
-            const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || '')); // Get all subcategories
-            const galleryContainer = document.getElementById('galleryContainer');
-            const categorySelect = createDropdown('categorySelect', categories);
-            const subcategorySelect = createDropdown('subcategorySelect', subcategories); // Initialize with all subcategories
-
-            categorySelect.addEventListener('change', () => {
-                filterSubcategories(subcategorySelect, categorySelect.value);
-                displayGallery();
+            requiredHeaders.forEach(header => {
+                indices[header] = headers.indexOf(header);
+                if (indices[header] === -1) {
+                    console.error(`Header ${header} not found.`);
+                    return;
+                }
             });
 
-            subcategorySelect.addEventListener('change', displayGallery);
-
-            galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
-            galleryContainer.appendChild(categorySelect);
-            galleryContainer.appendChild(createLabel('SubCategory:', 'subcategorySelect'));
-            galleryContainer.appendChild(subcategorySelect);
-
-            const resetButton = document.createElement('button');
-            resetButton.textContent = 'Reset';
-            resetButton.addEventListener('click', () => {
-                categorySelect.value = 'All';
-                subcategorySelect.value = 'All';
-                displayGallery();
-            });
-            galleryContainer.appendChild(resetButton);
-
-            displayGallery();
-            document.getElementById('csvGallery').style.display = 'flex';
+            initializeGallery();
         })
         .catch(error => console.error('Error fetching CSV:', error));
+
+    function initializeGallery() {
+        const categories = new Set(items.slice(1).map(item => item[indices['Category']] || ''));
+        const subcategories = new Set(items.slice(1).map(item => item[indices['SubCategory']] || ''));
+        const galleryContainer = document.getElementById('galleryContainer');
+
+        const categorySelect = createDropdown('categorySelect', categories);
+        const subcategorySelect = createDropdown('subcategorySelect', subcategories);
+
+        categorySelect.addEventListener('change', () => {
+            filterSubcategories(subcategorySelect, categorySelect.value);
+            displayGallery();
+        });
+        
+        subcategorySelect.addEventListener('change', displayGallery);
+
+        galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
+        galleryContainer.appendChild(categorySelect);
+        galleryContainer.appendChild(createLabel('SubCategory:', 'subcategorySelect'));
+        galleryContainer.appendChild(subcategorySelect);
+
+        const resetButton = createResetButton(categorySelect, subcategorySelect);
+        galleryContainer.appendChild(resetButton);
+
+        displayGallery();
+        document.getElementById('csvGallery').style.display = 'flex';
+    }
 
     function createDropdown(id, options) {
         const select = document.createElement('select');
         select.id = id;
         select.appendChild(createOption('All'));
+
         options.forEach(optionValue => {
             if (optionValue) {
                 select.appendChild(createOption(optionValue));
             }
         });
+
         return select;
     }
 
     function filterSubcategories(subcategorySelect, selectedCategory) {
-        subcategorySelect.innerHTML = ''; // Clear previous options
-        subcategorySelect.appendChild(createOption('All')); // Add "All" option
+        subcategorySelect.innerHTML = '';
+        subcategorySelect.appendChild(createOption('All'));
 
         if (selectedCategory === 'All') {
-            // Show all subcategories when "All" category is selected
-            const allSubcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || ''));
+            const allSubcategories = new Set(items.slice(1).map(item => item[indices['SubCategory']] || ''));
             allSubcategories.forEach(optionValue => {
                 if (optionValue) {
                     subcategorySelect.appendChild(createOption(optionValue));
                 }
             });
         } else {
-            // Filter based on selected category
-            const subcategories = new Set(items
-                .slice(1)
-                .filter(item => item[categoryIndex] === selectedCategory)
-                .map(item => item[subcategoryIndex] || '')
-            );
+            const subcategories = new Set(items.slice(1)
+                .filter(item => item[indices['Category']] === selectedCategory)
+                .map(item => item[indices['SubCategory']] || ''));
 
             subcategories.forEach(optionValue => {
                 if (optionValue) {
@@ -115,36 +112,34 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function displayGallery() {
         const selectedCategory = document.getElementById('categorySelect').value;
         const selectedSubcategory = document.getElementById('subcategorySelect').value;
-
         const gallery = document.getElementById('csvGallery');
         gallery.innerHTML = '';
         let itemCount = 0;
 
         const skuGroups = new Map();
 
-        for (let i = 1; i < items.length; i++) {
-            const item = items[i];
-            const sku = item[skuIndex];
-            const skuVar = item[skuVarIndex];
-            const quantityLimit = item[quantityLimitIndex].trim() === 'True';
-            const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
-            const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
+        items.slice(1).forEach(item => {
+            const sku = item[indices['SKU']];
+            const skuVar = item[indices['SKUVAR']];
+            const quantityLimit = item[indices['QuantityLimit']].trim() === 'True';
+            const categoryMatch = selectedCategory === 'All' || item[indices['Category']] === selectedCategory;
+            const subcategoryMatch = selectedSubcategory === 'All' || item[indices['SubCategory']] === selectedSubcategory;
 
             if (categoryMatch && subcategoryMatch) {
                 const key = `${sku}-${skuVar}`;
                 if (!skuGroups.has(key)) {
                     skuGroups.set(key, {
                         count: 1,
-                        skuName: item[skuNameIndex],
+                        skuName: item[indices['SKUName']],
                         imageUrl: item[0],
-                        quantityLimit: quantityLimit,
-                        sku: sku
+                        quantityLimit,
+                        sku
                     });
                 } else {
                     skuGroups.get(key).count++;
                 }
             }
-        }
+        });
 
         skuGroups.forEach(({ count, skuName, imageUrl, sku, quantityLimit }) => {
             const div = createCard(skuName, count, imageUrl, sku, quantityLimit);
@@ -159,7 +154,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const div = document.createElement('div');
         div.classList.add('card');
 
-        div.addEventListener('click', function() {
+        div.addEventListener('click', () => {
             const modalImg = document.getElementById("img01");
             const captionText = document.getElementById("caption");
 
@@ -198,7 +193,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         const skuDiv = document.createElement('div');
         skuDiv.classList.add('sku');
-        skuDiv.innerHTML = `${sku}`; 
+        skuDiv.innerHTML = sku; 
         contentDiv.appendChild(skuDiv);
 
         return contentDiv;
@@ -233,7 +228,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return label;
     }
 
+    function createResetButton(categorySelect, subcategorySelect) {
+        const resetButton = document.createElement('button');
+        resetButton.textContent = 'Reset';
+        resetButton.addEventListener('click', () => {
+            categorySelect.value = 'All';
+            subcategorySelect.value = 'All';
+            displayGallery();
+        });
+        return resetButton;
+    }
+
+    // Live search function
     let timeout = null;
+    document.getElementById("myInput").addEventListener('input', liveSearch);
 
     function liveSearch() {
         clearTimeout(timeout);
@@ -264,6 +272,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
             input.value = '';
         }, 1500);
     }
-
-    document.getElementById("myInput").addEventListener('input', liveSearch);
 });
