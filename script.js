@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         skuGroups.forEach(({ count, skuName, imageUrl, quantityLimit, sku }) => {
-            const div = createCard(skuName, quantityLimit ? '' : count, imageUrl, sku);
+            const div = createCard(skuName, quantityLimit ? count : '', imageUrl, sku);
             gallery.appendChild(div);
             itemCount++;
         });
@@ -181,14 +181,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const title = createParagraph(skuName, 'title');
         contentDiv.appendChild(title);
 
+        // Show SKU count if QuantityLimit is True
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
-        availableCountDiv.textContent = skuCount ? `${skuCount} Available` : '';
+        if (skuCount) {
+            availableCountDiv.textContent = `${skuCount} Available`;
+        }
         contentDiv.appendChild(availableCountDiv);
 
+        // Just show the SKU number
         const skuDiv = document.createElement('div');
         skuDiv.classList.add('sku');
-        skuDiv.textContent = `SKU: ${sku}`;
+        skuDiv.textContent = sku; // Only show the SKU number
         contentDiv.appendChild(skuDiv);
 
         return contentDiv;
