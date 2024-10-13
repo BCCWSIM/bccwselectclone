@@ -4,13 +4,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const closeModalButton = modal.querySelector(".close");
     modal.style.display = "none";
 
-    // Function to close the modal
     function closeModal() {
         modal.style.display = "none";
         document.body.classList.remove('modal-open');
     }
 
-    // Event listeners for closing the modal
     closeModalButton.addEventListener('click', closeModal);
     window.addEventListener('click', (event) => {
         if (event.target === modal) {
@@ -18,7 +16,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 
-    // Fetch CSV data and set up gallery
     let items = [];
     let headers, skuIndex, skuVarIndex, skuNameIndex, quantityLimitIndex, categoryIndex, subcategoryIndex;
 
@@ -44,17 +41,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
 
             const categories = new Set(items.slice(1).map(item => item[categoryIndex] || ''));
+            const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || '')); // Get all subcategories
             const galleryContainer = document.getElementById('galleryContainer');
             const categorySelect = createDropdown('categorySelect', categories);
-            const subcategorySelect = createDropdown('subcategorySelect', new Set());
+            const subcategorySelect = createDropdown('subcategorySelect', subcategories); // Initialize with all subcategories
 
             categorySelect.addEventListener('change', () => {
                 filterSubcategories(subcategorySelect, categorySelect.value);
                 displayGallery();
-                if (categorySelect.value === 'All') {
-                    subcategorySelect.value = 'All'; // Reset subcategory to 'All'
-                }
             });
+
             subcategorySelect.addEventListener('change', displayGallery);
 
             galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
@@ -89,20 +85,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     function filterSubcategories(subcategorySelect, selectedCategory) {
-        const subcategories = new Set(items
-            .slice(1)
-            .filter(item => selectedCategory === 'All' || item[categoryIndex] === selectedCategory)
-            .map(item => item[subcategoryIndex] || '')
-        );
-
         subcategorySelect.innerHTML = ''; // Clear previous options
         subcategorySelect.appendChild(createOption('All')); // Add "All" option
 
-        subcategories.forEach(optionValue => {
-            if (optionValue) {
-                subcategorySelect.appendChild(createOption(optionValue));
-            }
-        });
+        if (selectedCategory === 'All') {
+            // Show all subcategories when "All" category is selected
+            const allSubcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || ''));
+            allSubcategories.forEach(optionValue => {
+                if (optionValue) {
+                    subcategorySelect.appendChild(createOption(optionValue));
+                }
+            });
+        } else {
+            // Filter based on selected category
+            const subcategories = new Set(items
+                .slice(1)
+                .filter(item => item[categoryIndex] === selectedCategory)
+                .map(item => item[subcategoryIndex] || '')
+            );
+
+            subcategories.forEach(optionValue => {
+                if (optionValue) {
+                    subcategorySelect.appendChild(createOption(optionValue));
+                }
+            });
+        }
     }
 
     function displayGallery() {
@@ -182,7 +189,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const title = createParagraph(skuName, 'title');
         contentDiv.appendChild(title);
 
-        // Show SKU count if QuantityLimit is TRUE
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
         if (quantityLimit) {
@@ -190,7 +196,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
         contentDiv.appendChild(availableCountDiv);
 
-        // Just show the SKU number with a line break
         const skuDiv = document.createElement('div');
         skuDiv.classList.add('sku');
         skuDiv.innerHTML = `${sku}`; 
@@ -228,7 +233,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return label;
     }
 
-    // Live search function
     let timeout = null;
 
     function liveSearch() {
