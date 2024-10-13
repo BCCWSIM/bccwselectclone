@@ -32,13 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
             headers = items[0];
             const requiredHeaders = ['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Category', 'SubCategory'];
 
-            requiredHeaders.forEach(header => {
-                indices[header] = headers.indexOf(header);
-                if (indices[header] === -1) {
-                    console.error(`Header ${header} not found.`);
-                    return;
-                }
+            const missingHeaders = requiredHeaders.filter(header => {
+                const index = headers.indexOf(header);
+                indices[header] = index;
+                return index === -1;
             });
+
+            if (missingHeaders.length > 0) {
+                console.error(`Missing headers: ${missingHeaders.join(', ')}`);
+                return; // Stop execution if required headers are missing
+            }
 
             initializeGallery();
         })
@@ -46,11 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initializeGallery() {
         const categories = new Set(items.slice(1).map(item => item[indices['Category']] || ''));
-        const subcategories = new Set(items.slice(1).map(item => item[indices['SubCategory']] || ''));
         const galleryContainer = document.getElementById('galleryContainer');
 
         const categorySelect = createDropdown('categorySelect', categories);
-        const subcategorySelect = createDropdown('subcategorySelect', subcategories);
+        const subcategorySelect = createDropdown('subcategorySelect', new Set());
 
         categorySelect.addEventListener('change', () => {
             filterSubcategories(subcategorySelect, categorySelect.value);
@@ -89,24 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
         subcategorySelect.innerHTML = '';
         subcategorySelect.appendChild(createOption('All'));
 
-        if (selectedCategory === 'All') {
-            const allSubcategories = new Set(items.slice(1).map(item => item[indices['SubCategory']] || ''));
-            allSubcategories.forEach(optionValue => {
-                if (optionValue) {
-                    subcategorySelect.appendChild(createOption(optionValue));
-                }
-            });
-        } else {
-            const subcategories = new Set(items.slice(1)
+        const subcategories = selectedCategory === 'All'
+            ? new Set(items.slice(1).map(item => item[indices['SubCategory']] || ''))
+            : new Set(items.slice(1)
                 .filter(item => item[indices['Category']] === selectedCategory)
                 .map(item => item[indices['SubCategory']] || ''));
 
-            subcategories.forEach(optionValue => {
-                if (optionValue) {
-                    subcategorySelect.appendChild(createOption(optionValue));
-                }
-            });
-        }
+        subcategories.forEach(optionValue => {
+            if (optionValue) {
+                subcategorySelect.appendChild(createOption(optionValue));
+            }
+        });
     }
 
     function displayGallery() {
