@@ -130,7 +130,7 @@ label {
     padding: 10px; /* Increased padding for better spacing */
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Start aligning titles */
+    justify-content: space-between; /* Space between content */
     height: calc(100% - 150px); /* Adjust based on image height */
     text-align: center;
     flex-grow: 1; 
@@ -145,7 +145,7 @@ label {
 .card > div > .available-count {
     font-size: 0.9em; /* Standard size for available count */
     color: #666; /* Lighter color for the available count */
-    margin-top: 5px; /* Space between title and count */
+    margin-top: auto; /* Pushes it to the bottom of the card */
 }
 
 .card > div > .sku,
