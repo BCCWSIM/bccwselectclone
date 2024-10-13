@@ -119,7 +119,7 @@ label {
 
 .card img {
     width: 100%; /* Ensure image fits card width */
-    height: auto; /* Maintain aspect ratio */
+    height: 150px; /* Maintain aspect ratio */
     object-fit: contain; /* Ensure image fits within the card */
     border-radius: 15px 15px 0 0; 
     display: flex; /* Allow flex properties */
