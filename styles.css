@@ -105,66 +105,64 @@ label {
 .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 
                 0 6px 20px rgba(0, 0, 0, 0.19);
-    margin: 10px; /* Slightly increased margin for spacing */
+    margin: 10px; 
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 160px; /* Fixed width for the card */
-    height: 320px; /* Adjusted height for uniformity */
+    width: 160px; 
+    height: 320px; 
     position: relative;
-    overflow: hidden; /* Prevent content overflow */
-    background-color: #ffffff; /* Consistent background color */
+    overflow: hidden; 
+    background-color: #ffffff; 
 }
 
 .card img {
-    width: 100%; /* Ensure image fits card width */
-    height: 150px; /* Maintain aspect ratio */
-    object-fit: contain; /* Ensure image fits within the card */
+    width: 100%; 
+    height: 150px; 
+    object-fit: contain; 
     border-radius: 15px 15px 0 0; 
-    display: flex; /* Allow flex properties */
-    align-items: center; /* Center the image vertically */
 }
 
 .card > div {
-    padding: 10px; /* Increased padding for better spacing */
+    padding: 10px; 
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Space between content */
-    height: calc(100% - 150px); /* Adjust based on image height */
+    justify-content: space-between; 
+    height: calc(100% - 150px); 
     text-align: center;
     flex-grow: 1; 
 }
 
 .card > div > .title {
-    font-size: 1em; /* Standard font size for titles */
-    font-weight: bold; /* Bold for emphasis */
-    margin: 10px 0; /* Space around title */
+    font-size: 1em; 
+    font-weight: bold; 
+    margin: 10px 0; 
 }
 
 .card > div > .available-count {
-    font-size: 0.9em; /* Standard size for available count */
-    color: #666; /* Lighter color for the available count */
-    margin-top: auto; /* Pushes it to the bottom of the card */
+    font-size: 0.9em; 
+    color: #666; 
+    margin-top: auto; 
 }
 
 .card > div > .sku,
 .card > div > .id {
-    position: absolute; /* Absolute positioning for SKU and ID */
-    font-size: 0.7em; /* Consistent smaller font size */
-    color: #666; /* Color for both SKU and ID */
+    position: absolute; 
+    font-size: 0.7em; 
+    color: #666; 
 }
 
 .card > div > .sku {
-    bottom: 10px; /* Distance from the bottom */
-    right: 10px; /* Distance from the right */
-    text-align: right; /* Align text to the right */
+    bottom: 10px; 
+    right: 10px; 
+    text-align: right; 
 }
 
 .card > div > .id {
-    bottom: 10px; /* Distance from the bottom */
-    left: 10px; /* Distance from the left */
-    text-align: left; /* Align text to the left */
+    bottom: 10px; 
+    left: 10px; 
+    text-align: left; 
 }
 
 #galleryContainer {
@@ -187,10 +185,10 @@ label {
 #itemCount {
     font-size: 1.1em;
     margin: 10px 0;
-    color: #333; /* Adjust color as needed */
-    text-align: left; /* Align text to the left */
-    width: 100%; /* Full width of container */
-    padding-left: 10px; /* Optional padding for better spacing */
+    color: #333; 
+    text-align: left; 
+    width: 100%; 
+    padding-left: 10px; 
 }
 
 #searchAndFilterContainer {
@@ -227,22 +225,22 @@ label {
     height: 100%; 
     background-color: rgba(0, 0, 0, 0.8); 
     display: flex; 
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
+    align-items: center; 
+    justify-content: center; 
 }
 
 .modal-content {
-    background-color: rgba(255, 255, 255, 0.9); /* Light background like the card */
-    border-radius: 15px; /* Match card border radius */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
+    background-color: rgba(255, 255, 255, 0.9); 
+    border-radius: 15px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
     max-width: 90%; 
-    height: 35vh; /* Set height to 35% of the viewport height */
+    height: 35vh; 
     overflow: auto; 
-    padding: 20px; /* Add padding for content */
-    display: flex; /* Ensure flex layout for consistent spacing */
-    flex-direction: column; /* Align items vertically */
-    text-align: center; /* Center text */
-    margin: auto; /* Center the content */
+    padding: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    text-align: center; 
+    margin: auto; 
     margin-top: 10%;
 }
 
@@ -250,17 +248,17 @@ label {
     max-height: 90%; 
     max-width: 100%;
     width: auto;
-    height: auto; /* Maintain aspect ratio */
+    height: auto; 
     display: block; 
     margin: auto; 
-    border-radius: 15px; /* Rounded corners for images */
+    border-radius: 15px; 
 }
 
 .close {
     position: absolute;
     top: 20px;
     right: 30px;
-    color: #009688; /* Match the card icon color */
+    color: #009688; 
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
@@ -270,38 +268,35 @@ label {
     opacity: 0.3; 
 }
 
-/* Optional: Styles for text inside the modal */
 .modal-content p, 
 .modal-content h2, 
 .modal-content h3 {
-    font-family: "Inconsolata", "Arial", sans-serif; /* Match font */
-    color: #333; /* Dark text for visibility */
-    margin: 10px 0; /* Spacing between elements */
+    font-family: "Inconsolata", "Arial", sans-serif; 
+    color: #333; 
+    margin: 10px 0; 
 }
 
-/* Custom scrollbar styles for Webkit browsers */
 ::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
+    width: 12px; 
 }
 
 ::-webkit-scrollbar-track {
-    background: #EDEDED; /* Color of the scrollbar track */
-    border-radius: 10px; /* Rounded corners for the track */
+    background: #EDEDED; 
+    border-radius: 10px; 
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #009688; /* Color of the scrollbar handle */
-    border-radius: 10px; /* Rounded corners for the handle */
+    background: #009688; 
+    border-radius: 10px; 
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #007b5f; /* Darker color on hover */
+    background: #007b5f; 
 }
 
-/* Custom scrollbar styles for Firefox */
 * {
-    scrollbar-width: thin; /* Change to 'auto' for default scrollbar */
-    scrollbar-color: #009688 #EDEDED; /* Handle color and track color */
+    scrollbar-width: thin; 
+    scrollbar-color: #009688 #EDEDED; 
 }
 
 /* Add any other styles here */
