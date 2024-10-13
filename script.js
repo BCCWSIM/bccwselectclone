@@ -46,13 +46,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
 
             const categories = new Set(items.slice(1).map(item => item[categoryIndex] || ''));
-            const subcategories = new Set(items.slice(1).map(item => item[subcategoryIndex] || ''));
-
             const galleryContainer = document.getElementById('galleryContainer');
             const categorySelect = createDropdown('categorySelect', categories);
-            const subcategorySelect = createDropdown('subcategorySelect', subcategories);
+            const subcategorySelect = createDropdown('subcategorySelect', new Set());
 
-            categorySelect.addEventListener('change', displayGallery);
+            categorySelect.addEventListener('change', () => {
+                filterSubcategories(subcategorySelect, categorySelect.value);
+                displayGallery();
+            });
             subcategorySelect.addEventListener('change', displayGallery);
 
             galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
@@ -86,6 +87,23 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return select;
     }
 
+    function filterSubcategories(subcategorySelect, selectedCategory) {
+        const subcategories = new Set(items
+            .slice(1)
+            .filter(item => item[categoryIndex] === selectedCategory)
+            .map(item => item[subcategoryIndex] || '')
+        );
+
+        subcategorySelect.innerHTML = ''; // Clear previous options
+        subcategorySelect.appendChild(createOption('All')); // Add "All" option
+
+        subcategories.forEach(optionValue => {
+            if (optionValue) {
+                subcategorySelect.appendChild(createOption(optionValue));
+            }
+        });
+    }
+
     function displayGallery() {
         const selectedCategory = document.getElementById('categorySelect').value;
         const selectedSubcategory = document.getElementById('subcategorySelect').value;
@@ -100,19 +118,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const item = items[i];
             const sku = item[skuIndex];
             const skuVar = item[skuVarIndex];
-            const quantityLimit = item[quantityLimitIndex] === 'True'; // Check if QuantityLimit is 'True'
+            const quantityLimit = item[quantityLimitIndex] === 'True';
             const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
 
             if (categoryMatch && subcategoryMatch) {
-                const key = `${sku}-${skuVar}`; // Create unique key for grouping
+                const key = `${sku}-${skuVar}`;
                 if (!skuGroups.has(key)) {
                     skuGroups.set(key, {
                         count: 1,
                         skuName: item[skuNameIndex],
-                        imageUrl: item[0], // Assuming the first column is the image URL
+                        imageUrl: item[0],
                         quantityLimit: quantityLimit,
-                        sku: sku // Store SKU for display
+                        sku: sku
                     });
                 } else {
                     skuGroups.get(key).count++;
@@ -138,8 +156,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const captionText = document.getElementById("caption");
 
             modal.style.display = "block"; 
-            modalImg.src = imageUrl; // Use the image URL from the grouped item
-            captionText.innerHTML = skuName; // Show SKUName in the modal
+            modalImg.src = imageUrl;
+            captionText.innerHTML = skuName;
 
             document.body.classList.add('modal-open');
         });
@@ -170,7 +188,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         const skuDiv = document.createElement('div');
         skuDiv.classList.add('sku');
-        skuDiv.textContent = `SKU: ${sku}`; // Display the SKU
+        skuDiv.textContent = `SKU: ${sku}`;
         contentDiv.appendChild(skuDiv);
 
         return contentDiv;
@@ -223,7 +241,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const txtValueTitle = title ? title.textContent || title.innerText : '';
             const txtValueSku = sku ? sku.textContent || sku.innerText : '';
 
-            // Check if either title or SKU includes the filter text
             if (txtValueTitle.toUpperCase().includes(filter) || txtValueSku.toUpperCase().includes(filter)) {
                 card.style.display = "";
                 itemCount++;
@@ -234,7 +251,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
 
-        // Clear the input value after a delay (optional)
         timeout = setTimeout(() => {
             input.value = '';
         }, 1500);
