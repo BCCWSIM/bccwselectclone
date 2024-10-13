@@ -83,7 +83,7 @@ button {
     flex-direction: column;
     align-items: center;
     width: 160px; /* Fixed width for the card */
-    height: 320px; /* Adjusted height for uniformity */
+    height: 320px; /* Consistent height for all cards */
     position: relative;
     overflow: hidden; /* Prevent content overflow */
     background-color: #ffffff; /* Consistent background color */
@@ -91,13 +91,9 @@ button {
 
 .card img {
     width: 100%; /* Ensure image fits card width */
-    height: auto; /* Maintain aspect ratio */
-    max-height: 150%;
-    object-fit: contain; /* Ensure image fits within the card */
+    height: 150px; /* Fixed height for the image */
+    object-fit: cover; /* Ensure image covers the area while maintaining aspect ratio */
     border-radius: 15px 15px 0 0; 
-    min-height: 100px; /* Minimum height for image area */
-    display: flex; /* Allow flex properties */
-    align-items: center; /* Center the image vertically */
 }
 
 .card > div {
@@ -105,9 +101,8 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Start aligning titles */
-    height: calc(100% - 150px); /* Adjust based on image height */
+    flex-grow: 1; /* Allow div to grow and take remaining space */
     text-align: center;
-    flex-grow: 1; 
 }
 
 .card > div > .title {
