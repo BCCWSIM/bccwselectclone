@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         }
 
-        skuGroups.forEach(({ count, skuName, imageUrl, quantityLimit, sku }) => {
+        skuGroups.forEach(({ count, skuName, imageUrl, sku, quantityLimit }) => {
             const div = createCard(skuName, count, imageUrl, sku, quantityLimit);
             gallery.appendChild(div);
             itemCount++;
@@ -185,7 +185,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
         if (quantityLimit) {
-            availableCountDiv.textContent = `${skuCount} Available`;
+            availableCountDiv.textContent = `${skuCount} Available`; // Show count if QuantityLimit is TRUE
+        } else {
+            availableCountDiv.textContent = ''; // Otherwise, leave blank
         }
         contentDiv.appendChild(availableCountDiv);
 
@@ -260,5 +262,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }, 1500);
     }
 
-    document.getElementById("myInput").addEventListener("keyup", liveSearch);
+    document.getElementById("myInput").addEventListener('input', liveSearch);
 });
