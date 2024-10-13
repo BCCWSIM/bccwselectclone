@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const item = items[i];
             const sku = item[skuIndex];
             const skuVar = item[skuVarIndex];
-            const quantityLimit = item[quantityLimitIndex].trim() === 'True'; // Trim and check for "True"
+            const quantityLimit = item[quantityLimitIndex] === 'TRUE'; // Check for "TRUE"
             const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
 
@@ -170,6 +170,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
+        contentDiv.style.justifyContent = 'space-between'; // Ensure space is distributed
 
         const imageContainer = document.createElement('div');
         const img = createImage(imageUrl);
@@ -179,19 +180,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const title = createParagraph(skuName, 'title');
         contentDiv.appendChild(title);
 
-        // Show SKU count if QuantityLimit is TRUE
+        // Just show the SKU number
+        const skuDiv = document.createElement('div');
+        skuDiv.classList.add('sku');
+        skuDiv.textContent = sku; // Only show the SKU number
+        contentDiv.appendChild(skuDiv);
+
+        // Show SKU count at the bottom if QuantityLimit is TRUE
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
         if (quantityLimit) {
             availableCountDiv.textContent = `${skuCount} Available`; // Show count if QuantityLimit is TRUE
         }
         contentDiv.appendChild(availableCountDiv);
-
-        // Just show the SKU number
-        const skuDiv = document.createElement('div');
-        skuDiv.classList.add('sku');
-        skuDiv.textContent = sku; // Only show the SKU number
-        contentDiv.appendChild(skuDiv);
 
         return contentDiv;
     }
