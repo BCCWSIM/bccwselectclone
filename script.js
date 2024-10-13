@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     fetch('Resources.csv')
         .then(response => response.text())
         .then(csvData => {
-            csvData = csvData.replace(/%23/g, '#');
-
             items = csvData.split('\n')
                 .filter(row => row.trim().length > 0)
                 .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(cell => cell.replace(/^"|"$/g, '').trim()));
@@ -186,8 +184,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         availableCountDiv.classList.add('available-count');
         if (quantityLimit) {
             availableCountDiv.textContent = `${skuCount} Available`; // Show count if QuantityLimit is TRUE
-        } else {
-            availableCountDiv.textContent = ''; // Otherwise, leave blank
         }
         contentDiv.appendChild(availableCountDiv);
 
@@ -255,7 +251,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         });
 
-        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
+        document.getElementById('itemCount').textContent = `${itemCount} Found`;
 
         timeout = setTimeout(() => {
             input.value = '';
