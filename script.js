@@ -182,7 +182,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         // Show SKU count if QuantityLimit is TRUE
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
+
         if (quantityLimit) {
+            const lineBreak = document.createElement('br'); // Create a line break
+            availableCountDiv.appendChild(lineBreak); // Append line break
             availableCountDiv.textContent = `${skuCount} Available`; // Show count if QuantityLimit is TRUE
         }
         contentDiv.appendChild(availableCountDiv);
