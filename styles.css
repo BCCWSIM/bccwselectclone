@@ -118,9 +118,9 @@ label {
 }
 
 .card img {
-    width: 100%; /* Ensure image does not exceed card width */
-    height: 150px; /* Fixed height for image */
-    object-fit: cover; /* Use cover for better aspect ratio handling */
+    width: 100%; /* Ensure image fits card width */
+    height: auto; /* Maintain aspect ratio */
+    object-fit: contain; /* Ensure image fits within the card */
     border-radius: 15px 15px 0 0; 
 }
 
