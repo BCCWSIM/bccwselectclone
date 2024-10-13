@@ -105,35 +105,33 @@ label {
 .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 
                 0 6px 20px rgba(0, 0, 0, 0.19);
-    margin: 10px; /* Slightly increased margin for spacing */
+    margin: 5px;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 160px; /* Fixed width for the card */
-    height: 320px; /* Adjusted height for uniformity */
+    height: 300px; /* Fixed height for the card */
     position: relative;
     overflow: hidden; /* Prevent content overflow */
-    background-color: #ffffff; /* Consistent background color */
 }
 
 .image-area {
-    display: flex; /* Use flexbox for centering */
+    display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
-    min-height: 50%; /* Minimum height is 50% of the card */
+    min-height: 50%; /* Minimum height of 50% of the card */
     width: 100%; /* Full width */
 }
 
 .card img {
     max-width: 100%; /* Ensure image fits card width */
-    max-height: 100%; /* Ensure image does not exceed the area */
-    object-fit: contain; /* Ensure image fits within the area */
-    display: block; /* Ensure it takes up space */
+    max-height: 100%; /* Ensure image does not exceed area */
+    object-fit: contain; /* Ensure image fits within area */
 }
 
 .card > div {
-    padding: 10px; /* Increased padding for better spacing */
+    padding: 5px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Start aligning titles */
@@ -321,7 +319,4 @@ label {
 /* Custom scrollbar styles for Firefox */
 * {
     scrollbar-width: thin; /* Change to 'auto' for default scrollbar */
-    scrollbar-color: #009688 #EDEDED; /* Handle color and track color */
-}
-
-/* Add any other styles here */
+    scrollbar-color: #009688 #EDEDED; /* Handle color and track
