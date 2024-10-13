@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         skuGroups.forEach(({ count, skuName, imageUrl, quantityLimit, sku }) => {
-            const div = createCard(skuName, quantityLimit ? count : '', imageUrl, sku, quantityLimit);
+            const div = createCard(skuName, count, imageUrl, sku, quantityLimit);
             gallery.appendChild(div);
             itemCount++;
         });
@@ -260,5 +260,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }, 1500);
     }
 
-    document.getElementById("myInput").addEventListener('input', liveSearch);
+    document.getElementById("myInput").addEventListener("keyup", liveSearch);
 });
