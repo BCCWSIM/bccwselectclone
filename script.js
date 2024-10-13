@@ -24,25 +24,28 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('Resources.csv')
         .then(response => response.text())
         .then(csvData => {
-            items = csvData.split('\n')
-                .filter(row => row.trim().length > 0)
-                .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
-                .map(cell => cell.replace(/^"|"$/g, '').trim()));
-
+            items = parseCSV(csvData);
             headers = items[0];
-            const requiredHeaders = ['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Category', 'SubCategory'];
-
-            requiredHeaders.forEach(header => {
-                indices[header] = headers.indexOf(header);
-                if (indices[header] === -1) {
-                    console.error(`Header ${header} not found.`);
-                    return;
-                }
-            });
-
+            initializeIndices(['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Category', 'SubCategory']);
             initializeGallery();
         })
         .catch(error => console.error('Error fetching CSV:', error));
+
+    function parseCSV(csvData) {
+        return csvData.split('\n')
+            .filter(row => row.trim().length > 0)
+            .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
+            .map(cell => cell.replace(/^"|"$/g, '').trim()));
+    }
+
+    function initializeIndices(requiredHeaders) {
+        requiredHeaders.forEach(header => {
+            indices[header] = headers.indexOf(header);
+            if (indices[header] === -1) {
+                console.error(`Header ${header} not found.`);
+            }
+        });
+    }
 
     function initializeGallery() {
         const categories = new Set(items.slice(1).map(item => item[indices['Category']] || ''));
@@ -62,11 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryContainer.appendChild(categorySelect);
         galleryContainer.appendChild(createLabel('SubCategory:', 'subcategorySelect'));
         galleryContainer.appendChild(subcategorySelect);
-
+        
         const resetButton = createResetButton(categorySelect, subcategorySelect);
         galleryContainer.appendChild(resetButton);
 
-        // Populate subcategories for the initial category selection
         filterSubcategories(subcategorySelect, categorySelect.value);
         displayGallery();
     }
@@ -173,8 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imageContainer.appendChild(img);
         contentDiv.appendChild(imageContainer);
 
-        const title = createParagraph(skuName, 'title');
-        contentDiv.appendChild(title);
+        contentDiv.appendChild(createParagraph(skuName, 'title'));
 
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
