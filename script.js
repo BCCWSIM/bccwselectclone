@@ -43,31 +43,30 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 return;
             }
 
-            // Other code for setting up categories and subcategories...
-
             displayGallery();
             document.getElementById('csvGallery').style.display = 'flex';
         })
         .catch(error => console.error('Error fetching CSV:', error));
 
     function displayGallery() {
-        // Other filtering logic...
+        const gallery = document.getElementById('csvGallery');
+        gallery.innerHTML = '';
+        let itemCount = 0;
 
         const skuGroups = new Map();
 
         for (let i = 1; i < items.length; i++) {
             const item = items[i];
-            // Assuming category and subcategory filtering is done...
-
             const sku = item[skuIndex];
             const skuVar = item[skuVarIndex];
-            const quantityLimit = item[quantityLimitIndex] === 'True'; // Ensure you're checking against string 'True'
+            const quantityLimit = item[quantityLimitIndex] === 'True'; // Check if QuantityLimit is 'True'
 
             const key = `${sku}-${skuVar}`; // Create unique key for grouping
             if (!skuGroups.has(key)) {
                 skuGroups.set(key, {
                     count: 1,
                     skuName: item[skuNameIndex],
+                    imageUrl: item[0], // Assuming the first column is the image URL
                     quantityLimit: quantityLimit
                 });
             } else {
@@ -75,32 +74,45 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
         }
 
-        skuGroups.forEach(({ count, skuName, quantityLimit }) => {
-            const div = createCard(skuName, quantityLimit ? '' : count);
+        skuGroups.forEach(({ count, skuName, imageUrl, quantityLimit }) => {
+            const div = createCard(skuName, quantityLimit ? '' : count, imageUrl);
             gallery.appendChild(div);
+            itemCount++;
         });
 
-        document.getElementById('itemCount').textContent = ` ${gallery.childElementCount} Found`;
+        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
 
-    function createCard(skuName, skuCount) {
+    function createCard(skuName, skuCount, imageUrl) {
         const div = document.createElement('div');
         div.classList.add('card');
 
         div.addEventListener('click', function() {
-            // Modal handling...
+            const modalImg = document.getElementById("img01");
+            const captionText = document.getElementById("caption");
+
+            modal.style.display = "block"; 
+            modalImg.src = imageUrl; // Use the image URL from the grouped item
+            captionText.innerHTML = skuName; // Show SKUName in the modal
+
+            document.body.classList.add('modal-open');
         });
 
-        const contentDiv = createContentDiv(skuName, skuCount);
+        const contentDiv = createContentDiv(skuName, skuCount, imageUrl);
         div.appendChild(contentDiv);
 
         return div;
     }
 
-    function createContentDiv(skuName, skuCount) {
+    function createContentDiv(skuName, skuCount, imageUrl) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
+
+        const imageContainer = document.createElement('div');
+        const img = createImage(imageUrl);
+        imageContainer.appendChild(img);
+        contentDiv.appendChild(imageContainer);
 
         const title = createParagraph(skuName, 'title');
         contentDiv.appendChild(title);
@@ -113,5 +125,70 @@ document.addEventListener('DOMContentLoaded', (event) => {
         return contentDiv;
     }
 
-    // Other helper functions...
+    function createImage(src) {
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = 'Thumbnail';
+        img.classList.add('thumbnail');
+        return img;
+    }
+
+    function createParagraph(text, className) {
+        const p = document.createElement('p');
+        p.textContent = text;
+        p.classList.add(className);
+        return p;
+    }
+
+    function createOption(value) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        return option;
+    }
+
+    function createLabel(text, htmlFor) {
+        const label = document.createElement('label');
+        label.textContent = text;
+        label.htmlFor = htmlFor;
+        return label;
+    }
+
+    // Live search function
+    let timeout = null;
+
+    function liveSearch() {
+        clearTimeout(timeout);
+
+        const input = document.getElementById("myInput");
+        const filter = input.value.toUpperCase();
+        const gallery = document.getElementById('csvGallery');
+        const cards = gallery.getElementsByClassName('card');
+
+        let itemCount = 0; 
+        Array.from(cards).forEach(card => {
+            const title = card.getElementsByClassName("title")[0];
+            const sku = card.getElementsByClassName("sku")[0];
+            const txtValueTitle = title ? title.textContent || title.innerText : '';
+            const txtValueSku = sku ? sku.textContent || sku.innerText : '';
+
+            // Check if either title or SKU includes the filter text
+            if (txtValueTitle.toUpperCase().includes(filter) || txtValueSku.toUpperCase().includes(filter)) {
+                card.style.display = "";
+                itemCount++;
+            } else {
+                card.style.display = "none";
+            }
+        });
+
+        document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
+
+        // Clear the input value after a delay (optional)
+        timeout = setTimeout(() => {
+            input.value = '';
+        }, 1500);
+    }
+
+    // Event listener for live search input
+    document.getElementById("myInput").addEventListener('input', liveSearch);
 });
