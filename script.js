@@ -183,14 +183,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
         if (quantityLimit) {
-            availableCountDiv.innerHTML = `${skuCount} Available<br>`; // Add line break here
+            availableCountDiv.innerHTML = `${skuCount} <br>Available`; 
         }
         contentDiv.appendChild(availableCountDiv);
 
         // Just show the SKU number with a line break
         const skuDiv = document.createElement('div');
         skuDiv.classList.add('sku');
-        skuDiv.innerHTML = `${sku}<br>`; // Add line break here for SKU
+        skuDiv.innerHTML = `${sku}`; 
         contentDiv.appendChild(skuDiv);
 
         return contentDiv;
