@@ -25,18 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.text())
         .then(csvData => {
             items = parseCSV(csvData);
-
             headers = items[0];
-            const requiredHeaders = ['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Category', 'SubCategory'];
-
-            requiredHeaders.forEach(header => {
-                indices[header] = headers.indexOf(header);
-                if (indices[header] === -1) {
-                    console.error(`Header ${header} not found.`);
-                    return;
-                }
-            });
-
+            initializeIndices(['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Category', 'SubCategory']);
             initializeGallery();
         })
         .catch(error => console.error('Error fetching CSV:', error));
@@ -45,10 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return csvData.split('\n')
             .filter(row => row.trim().length > 0)
             .map(row => row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g)
-            .map(cell => {
-                // Transform Google Drive links if needed
-                return transformThumbnailLink(cell.trim());
-            }));
+            .map(cell => transformThumbnailLink(cell.replace(/^"|"$/g, '').trim())));
     }
 
     function transformThumbnailLink(url) {
@@ -61,31 +48,39 @@ document.addEventListener('DOMContentLoaded', () => {
         return url; // Return the original URL if it doesn't match the pattern
     }
 
+    function initializeIndices(requiredHeaders) {
+        requiredHeaders.forEach(header => {
+            indices[header] = headers.indexOf(header);
+            if (indices[header] === -1) {
+                console.error(`Header ${header} not found.`);
+            }
+        });
+    }
+
     function initializeGallery() {
         const categories = new Set(items.slice(1).map(item => item[indices['Category']] || ''));
-        const subcategories = new Set(items.slice(1).map(item => item[indices['SubCategory']] || ''));
         const galleryContainer = document.getElementById('galleryContainer');
 
         const categorySelect = createDropdown('categorySelect', categories);
-        const subcategorySelect = createDropdown('subcategorySelect', subcategories);
+        const subcategorySelect = createDropdown('subcategorySelect', new Set());
 
         categorySelect.addEventListener('change', () => {
             filterSubcategories(subcategorySelect, categorySelect.value);
             displayGallery();
         });
-        
+
         subcategorySelect.addEventListener('change', displayGallery);
 
         galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
         galleryContainer.appendChild(categorySelect);
         galleryContainer.appendChild(createLabel('SubCategory:', 'subcategorySelect'));
         galleryContainer.appendChild(subcategorySelect);
-
+        
         const resetButton = createResetButton(categorySelect, subcategorySelect);
         galleryContainer.appendChild(resetButton);
 
+        filterSubcategories(subcategorySelect, categorySelect.value);
         displayGallery();
-        document.getElementById('csvGallery').style.display = 'flex';
     }
 
     function createDropdown(id, options) {
@@ -106,24 +101,16 @@ document.addEventListener('DOMContentLoaded', () => {
         subcategorySelect.innerHTML = '';
         subcategorySelect.appendChild(createOption('All'));
 
-        if (selectedCategory === 'All') {
-            const allSubcategories = new Set(items.slice(1).map(item => item[indices['SubCategory']] || ''));
-            allSubcategories.forEach(optionValue => {
-                if (optionValue) {
-                    subcategorySelect.appendChild(createOption(optionValue));
-                }
-            });
-        } else {
-            const subcategories = new Set(items.slice(1)
-                .filter(item => item[indices['Category']] === selectedCategory)
-                .map(item => item[indices['SubCategory']] || ''));
+        const subcategories = new Set(items.slice(1)
+            .filter(item => selectedCategory === 'All' || item[indices['Category']] === selectedCategory)
+            .map(item => item[indices['SubCategory']] || '')
+        );
 
-            subcategories.forEach(optionValue => {
-                if (optionValue) {
-                    subcategorySelect.appendChild(createOption(optionValue));
-                }
-            });
-        }
+        subcategories.forEach(optionValue => {
+            if (optionValue) {
+                subcategorySelect.appendChild(createOption(optionValue));
+            }
+        });
     }
 
     function displayGallery() {
@@ -198,8 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imageContainer.appendChild(img);
         contentDiv.appendChild(imageContainer);
 
-        const title = createParagraph(skuName, 'title');
-        contentDiv.appendChild(title);
+        contentDiv.appendChild(createParagraph(skuName, 'title'));
 
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
