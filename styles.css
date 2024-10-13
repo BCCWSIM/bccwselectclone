@@ -105,28 +105,27 @@ label {
 .card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 
                 0 6px 20px rgba(0, 0, 0, 0.19);
-    margin: 5px;
+    margin: 10px; /* Slightly increased margin for spacing */
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 160px; /* Fixed width for the card */
-    height: 300px; /* Fixed height for the card */
+    height: 320px; /* Adjusted height for uniformity */
     position: relative;
     overflow: hidden; /* Prevent content overflow */
+    background-color: #ffffff; /* Consistent background color */
 }
 
 .card img {
     width: 100%; /* Ensure image does not exceed card width */
     height: 150px; /* Fixed height for image */
-    object-fit: contain; /* Ensure image is contained */
+    object-fit: cover; /* Use cover for better aspect ratio handling */
     border-radius: 15px 15px 0 0; 
-    flex-shrink: 0; 
-    display: block; /* Ensure it takes up space */
 }
 
 .card > div {
-    padding: 5px;
+    padding: 10px; /* Increased padding for better spacing */
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Start aligning titles */
@@ -135,14 +134,39 @@ label {
     flex-grow: 1; 
 }
 
-@media (max-width: 400px) {
-    .card {
-        max-width: calc(42% - 1px);
-    }
+.card > div > .title {
+    font-size: 1em; /* Standard font size for titles */
+    font-weight: bold; /* Bold for emphasis */
+    margin: 5px 0; /* Space around title */
+}
+
+.card > div > .available-count {
+    font-size: 0.9em; /* Standard size for available count */
+    color: #666; /* Lighter color for the available count */
+    margin-top: 5px; /* Space between title and count */
+}
+
+.card > div > .sku,
+.card > div > .id {
+    position: absolute; /* Absolute positioning for SKU and ID */
+    font-size: 0.7em; /* Consistent smaller font size */
+    color: #666; /* Color for both SKU and ID */
+}
+
+.card > div > .sku {
+    bottom: 10px; /* Distance from the bottom */
+    right: 10px; /* Distance from the right */
+    text-align: right; /* Align text to the right */
+}
+
+.card > div > .id {
+    bottom: 10px; /* Distance from the bottom */
+    left: 10px; /* Distance from the left */
+    text-align: left; /* Align text to the left */
 }
 
 .card.selected {
-    background-color: lightgreen;
+    background-color: lightgreen; /* Highlight selected card */
 }
 
 .quantity-input {
@@ -204,30 +228,6 @@ label {
 .w3-third {
     width: auto; 
     display: inline-block; 
-}
-
-.card > div > .sku {
-    position: absolute; /* Use absolute positioning */
-    bottom: 10px; /* Distance from the bottom */
-    right: 10px; /* Distance from the right */
-    font-size: 0.6em; /* Smaller font size for SKU */
-    text-align: right; /* Align text to the right */
-    color: #666; /* Color for SKU */
-}
-
-.card > div > .id {
-    position: absolute; /* Use absolute positioning */
-    bottom: 10px; /* Distance from the bottom */
-    left: 10px; /* Distance from the left */
-    font-size: 0.6em; /* Smaller font size for ID */
-    text-align: left; /* Align text to the left */
-    color: #666; /* Color for ID */
-}
-
-.card > div > .available-count {
-    font-size: 0.9em; /* Slightly smaller font for available count */
-    color: #666; /* Lighter color for the available count */
-    margin-top: 5px; /* Space between title and count */
 }
 
 .modal {
