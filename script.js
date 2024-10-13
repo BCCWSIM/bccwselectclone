@@ -236,7 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resetButton.textContent = 'Reset';
         resetButton.addEventListener('click', () => {
             categorySelect.value = 'All';
-            subcategorySelect.value = 'All';
+            subcategorySelect.value = 'All'; // Reset subcategory to 'All'
+            filterSubcategories(subcategorySelect, 'All'); // Re-filter subcategories
             displayGallery();
         });
         return resetButton;
