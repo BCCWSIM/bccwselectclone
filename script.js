@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
 
         skuGroups.forEach(({ count, skuName, imageUrl, quantityLimit, sku }) => {
-            const div = createCard(skuName, quantityLimit ? count : '', imageUrl, sku);
+            const div = createCard(skuName, quantityLimit ? count : '', imageUrl, sku, quantityLimit);
             gallery.appendChild(div);
             itemCount++;
         });
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
     }
 
-    function createCard(skuName, skuCount, imageUrl, sku) {
+    function createCard(skuName, skuCount, imageUrl, sku, quantityLimit) {
         const div = document.createElement('div');
         div.classList.add('card');
 
@@ -162,13 +162,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
             document.body.classList.add('modal-open');
         });
 
-        const contentDiv = createContentDiv(skuName, skuCount, imageUrl, sku);
+        const contentDiv = createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit);
         div.appendChild(contentDiv);
 
         return div;
     }
 
-    function createContentDiv(skuName, skuCount, imageUrl, sku) {
+    function createContentDiv(skuName, skuCount, imageUrl, sku, quantityLimit) {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
@@ -181,10 +181,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const title = createParagraph(skuName, 'title');
         contentDiv.appendChild(title);
 
-        // Show SKU count if QuantityLimit is TRUE
+        // Show SKU count with "Available" if QuantityLimit is TRUE
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
-        if (skuCount) {
+        if (quantityLimit) {
             availableCountDiv.textContent = `${skuCount} Available`;
         }
         contentDiv.appendChild(availableCountDiv);
@@ -260,6 +260,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }, 1500);
     }
 
-    // Event listener for live search input
     document.getElementById("myInput").addEventListener('input', liveSearch);
 });
