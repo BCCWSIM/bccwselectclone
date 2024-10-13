@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const item = items[i];
             const sku = item[skuIndex];
             const skuVar = item[skuVarIndex];
-            const quantityLimit = item[quantityLimitIndex] === 'TRUE'; // Check for "TRUE"
+            const quantityLimit = item[quantityLimitIndex].trim() === 'True'; // Trim and check for "True"
             const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
 
@@ -179,11 +179,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const title = createParagraph(skuName, 'title');
         contentDiv.appendChild(title);
 
-        // Show SKU count with "Available" if QuantityLimit is TRUE
+        // Show SKU count if QuantityLimit is TRUE
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
         if (quantityLimit) {
-            availableCountDiv.textContent = `${skuCount} Available`; // Show count if QuantityLimit is "TRUE"
+            availableCountDiv.textContent = `${skuCount} Available`; // Show count if QuantityLimit is TRUE
         }
         contentDiv.appendChild(availableCountDiv);
 
