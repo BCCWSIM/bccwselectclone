@@ -239,9 +239,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let itemCount = 0; 
         Array.from(cards).forEach(card => {
             const title = card.getElementsByClassName("title")[0];
+            const sku = card.getElementsByClassName("sku")[0];
             const txtValueTitle = title ? title.textContent || title.innerText : '';
+            const txtValueSku = sku ? sku.textContent || sku.innerText : '';
 
-            if (txtValueTitle.toUpperCase().includes(filter)) {
+            // Check if either title or SKU includes the filter text
+            if (txtValueTitle.toUpperCase().includes(filter) || txtValueSku.toUpperCase().includes(filter)) {
                 card.style.display = "";
                 itemCount++;
             } else {
@@ -251,6 +254,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         document.getElementById('itemCount').textContent = ` ${itemCount} Found`;
 
+        // Clear the input value after a delay (optional)
         timeout = setTimeout(() => {
             input.value = '';
         }, 1500);
