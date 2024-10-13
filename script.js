@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             categoryIndex = headers.indexOf('Category');
             subcategoryIndex = headers.indexOf('SubCategory');
-            idIndex = headers.indexOf('ID'); // Adjusted to be after SubCategory
+            idIndex = headers.indexOf('ID');
             skuIndex = headers.indexOf('SKU');
 
             if (idIndex === -1 || skuIndex === -1 || categoryIndex === -1 || subcategoryIndex === -1) {
@@ -150,68 +150,63 @@ document.addEventListener('DOMContentLoaded', (event) => {
         const contentDiv = document.createElement('div');
         contentDiv.style.display = 'flex';
         contentDiv.style.flexDirection = 'column';
-        contentDiv.style.position = 'relative'; // Allow absolute positioning for children
+        contentDiv.style.position = 'relative';
 
-        let img, title;
+        // Create an image container
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('image-container');
+        
+        const img = createImage(dataRowItems[0]); // Assuming the first column is the image URL
+        imageContainer.appendChild(img);
+        contentDiv.appendChild(imageContainer);
 
-        dataRowItems.forEach((cell, cellIndex) => {
-            if (headers[cellIndex] === 'Title') {
-                title = createParagraph(cell, 'title');
-            } else if (cellIndex === 0) { // Assuming the first column is the image URL
-                img = createImage(cell);
-            }
-        });
-
-        contentDiv.appendChild(img);
+        const title = createParagraph(dataRowItems[headers.indexOf('Title')], 'title');
         contentDiv.appendChild(title);
 
-        // Add Available count below the title
         const availableCountDiv = document.createElement('div');
         availableCountDiv.classList.add('available-count');
-        availableCountDiv.textContent = `${skuCount} Available`; // 'Available' text
-        contentDiv.appendChild(availableCountDiv); // Append count to content
+        availableCountDiv.textContent = `${skuCount} Available`;
+        contentDiv.appendChild(availableCountDiv);
 
-        // Add ID and SKU display
         const idDiv = document.createElement('div');
         idDiv.classList.add('id');
-        idDiv.textContent = dataRowItems[idIndex]; // ID display
+        idDiv.textContent = dataRowItems[idIndex];
 
         const skuDiv = document.createElement('div');
         skuDiv.classList.add('sku');
-        skuDiv.textContent = dataRowItems[skuIndex]; // SKU without "SKU:" header
+        skuDiv.textContent = dataRowItems[skuIndex];
 
         // Positioning bottom right
         const bottomDiv = document.createElement('div');
         bottomDiv.style.display = 'flex';
-        bottomDiv.style.justifyContent = 'space-between'; // Distribute space between elements
-        bottomDiv.style.position = 'absolute'; // Position relative to contentDiv
-        bottomDiv.style.bottom = '10px'; // Adjust as needed
+        bottomDiv.style.justifyContent = 'space-between';
+        bottomDiv.style.position = 'absolute';
+        bottomDiv.style.bottom = '10px';
         bottomDiv.style.left = '0';
         bottomDiv.style.right = '0';
 
-        // Adjust sizes
-        idDiv.style.fontSize = 'small'; // Adjust font size for ID
-        skuDiv.style.fontSize = 'x-small'; // Adjust font size for SKU
+        idDiv.style.fontSize = 'small';
+        skuDiv.style.fontSize = 'x-small';
 
         bottomDiv.appendChild(skuDiv);
         bottomDiv.appendChild(idDiv);
 
-        contentDiv.appendChild(bottomDiv); // Append ID and SKU to content
+        contentDiv.appendChild(bottomDiv);
 
         return contentDiv;
     }
 
-    function createImage(cell) {
+    function createImage(src) {
         const img = document.createElement('img');
-        img.src = cell;
+        img.src = src;
         img.alt = 'Thumbnail';
         img.classList.add('thumbnail');
         return img;
     }
 
-    function createParagraph(cell, className) {
+    function createParagraph(text, className) {
         const p = document.createElement('p');
-        p.textContent = cell;
+        p.textContent = text;
         p.classList.add(className);
         return p;
     }
