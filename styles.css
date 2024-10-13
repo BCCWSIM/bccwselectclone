@@ -122,8 +122,6 @@ label {
     height: auto; /* Maintain aspect ratio */
     object-fit: contain; /* Ensure image fits within the card */
     border-radius: 15px 15px 0 0; 
-    min-height: 45%; /* Minimum height for image area */
-    max-height: 45%;
     display: flex; /* Allow flex properties */
     align-items: center; /* Center the image vertically */
 }
