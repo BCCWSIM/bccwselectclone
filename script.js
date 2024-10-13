@@ -32,16 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
             headers = items[0];
             const requiredHeaders = ['SKU', 'SKUVAR', 'SKUName', 'QuantityLimit', 'Category', 'SubCategory'];
 
-            const missingHeaders = requiredHeaders.filter(header => {
-                const index = headers.indexOf(header);
-                indices[header] = index;
-                return index === -1;
+            requiredHeaders.forEach(header => {
+                indices[header] = headers.indexOf(header);
+                if (indices[header] === -1) {
+                    console.error(`Header ${header} not found.`);
+                    return;
+                }
             });
-
-            if (missingHeaders.length > 0) {
-                console.error(`Missing headers: ${missingHeaders.join(', ')}`);
-                return; // Stop execution if required headers are missing
-            }
 
             initializeGallery();
         })
@@ -58,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filterSubcategories(subcategorySelect, categorySelect.value);
             displayGallery();
         });
-        
+
         subcategorySelect.addEventListener('change', displayGallery);
 
         galleryContainer.appendChild(createLabel('Category:', 'categorySelect'));
@@ -69,8 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const resetButton = createResetButton(categorySelect, subcategorySelect);
         galleryContainer.appendChild(resetButton);
 
+        // Populate subcategories for the initial category selection
+        filterSubcategories(subcategorySelect, categorySelect.value);
         displayGallery();
-        document.getElementById('csvGallery').style.display = 'flex';
     }
 
     function createDropdown(id, options) {
@@ -91,11 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
         subcategorySelect.innerHTML = '';
         subcategorySelect.appendChild(createOption('All'));
 
-        const subcategories = selectedCategory === 'All'
-            ? new Set(items.slice(1).map(item => item[indices['SubCategory']] || ''))
-            : new Set(items.slice(1)
-                .filter(item => item[indices['Category']] === selectedCategory)
-                .map(item => item[indices['SubCategory']] || ''));
+        const subcategories = new Set(items.slice(1)
+            .filter(item => selectedCategory === 'All' || item[indices['Category']] === selectedCategory)
+            .map(item => item[indices['SubCategory']] || '')
+        );
 
         subcategories.forEach(optionValue => {
             if (optionValue) {
