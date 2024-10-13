@@ -117,14 +117,19 @@ label {
     background-color: #ffffff; /* Consistent background color */
 }
 
+.image-area {
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    min-height: 50%; /* Minimum height is 50% of the card */
+    width: 100%; /* Full width */
+}
+
 .card img {
-    width: 100%; /* Ensure image fits card width */
-    height: auto; /* Maintain aspect ratio */
-    object-fit: contain; /* Ensure image fits within the card */
-    border-radius: 15px 15px 0 0; 
-    min-height: 100px; /* Minimum height for image area */
-    display: flex; /* Allow flex properties */
-    align-items: center; /* Center the image vertically */
+    max-width: 100%; /* Ensure image fits card width */
+    max-height: 100%; /* Ensure image does not exceed the area */
+    object-fit: contain; /* Ensure image fits within the area */
+    display: block; /* Ensure it takes up space */
 }
 
 .card > div {
@@ -132,9 +137,8 @@ label {
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Start aligning titles */
-    height: calc(100% - 150px); /* Adjust based on image height */
+    height: calc(50%); /* Remaining height for titles */
     text-align: center;
-    flex-grow: 1; 
 }
 
 .card > div > .title {
