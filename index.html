@@ -13,38 +13,41 @@
 <body class="w3-light-grey">
     <!-- Page Container -->
     <div class="w3-content w3-margin-top" style="max-width: 1400px;">
-        <div class="w3-row-padding">
-            <div class="w3">
-                <div class="w3-container w3-card w3-white w3-margin-bottom">
-                    <div style="display: flex; justify-content: space-between;">
-                        <img src="https://lh3.googleusercontent.com/d/1pycErU1dgRNfZEFXBJToLkj5mVqSkFjb" class="logo1" alt="Logo 1">
-                        <img src="https://lh3.googleusercontent.com/d/19bi1iNE8JYD1kVJ3nGH0YevbPh-sdQ9b" class="logo1" alt="Logo 2">
+        <header>
+            <div class="w3-row-padding">
+                <div class="w3">
+                    <div class="w3-container w3-card w3-white w3-margin-bottom">
+                        <div style="display: flex; justify-content: space-between;">
+                            <img src="https://lh3.googleusercontent.com/d/1pycErU1dgRNfZEFXBJToLkj5mVqSkFjb" class="logo1" alt="Company Logo 1">
+                            <img src="https://lh3.googleusercontent.com/d/19bi1iNE8JYD1kVJ3nGH0YevbPh-sdQ9b" class="logo1" alt="Company Logo 2">
+                        </div>
+                        <div id="searchAndFilterContainer">
+                            <input type="text" id="myInput" onkeyup="liveSearch()" placeholder="Search...">
+                            <div id="galleryContainer"></div>
+                            <div id="itemCount"><span id="countValue">0</span> Found</div>
+                        </div>
                     </div>
-                    <div id="searchAndFilterContainer">
-                        <input type="text" id="myInput" onkeyup="liveSearch()" placeholder="Search...">
-                        <div id="galleryContainer"></div>
-                        <div id="itemCount"><span id="countValue">0</span> Found</div>
+                    <div class="w3-container w3-card w3-white">
+                        <div id="csvGallery"></div>
                     </div>
-                </div>
-                <div class="w3-container w3-card w3-white">
-                    <div id="csvGallery"></div>
                 </div>
             </div>
-        </div>
+        </header>
     </div>
 
     <div id="myModal" class="modal">
         <span class="close">&times;</span>
         <div class="modal-content">
-            <img id="img01" alt="">
+            <img id="img01" alt="Modal Image">
             <div id="caption"></div>
         </div>
     </div>
 
- <!--   <footer class="w3-container w3-teal w3-center w3-margin-top">
+    <!-- Optional Footer -->
+    <!-- <footer class="w3-container w3-teal w3-center w3-margin-top">
         <p>© 2024 SimOrder. All rights reserved.</p>
-    </footer>
--->
+    </footer> -->
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.1.0/papaparse.min.js"></script>
