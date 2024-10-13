@@ -51,6 +51,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             categorySelect.addEventListener('change', () => {
                 filterSubcategories(subcategorySelect, categorySelect.value);
                 displayGallery();
+                if (categorySelect.value === 'All') {
+                    subcategorySelect.value = 'All'; // Reset subcategory to 'All'
+                }
             });
             subcategorySelect.addEventListener('change', displayGallery);
 
@@ -88,7 +91,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     function filterSubcategories(subcategorySelect, selectedCategory) {
         const subcategories = new Set(items
             .slice(1)
-            .filter(item => item[categoryIndex] === selectedCategory)
+            .filter(item => selectedCategory === 'All' || item[categoryIndex] === selectedCategory)
             .map(item => item[subcategoryIndex] || '')
         );
 
@@ -116,7 +119,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const item = items[i];
             const sku = item[skuIndex];
             const skuVar = item[skuVarIndex];
-            const quantityLimit = item[quantityLimitIndex].trim() === 'True'; // Trim and check for "True"
+            const quantityLimit = item[quantityLimitIndex].trim() === 'True';
             const categoryMatch = selectedCategory === 'All' || item[categoryIndex] === selectedCategory;
             const subcategoryMatch = selectedSubcategory === 'All' || item[subcategoryIndex] === selectedSubcategory;
 
