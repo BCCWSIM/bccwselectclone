@@ -168,21 +168,6 @@ label {
     text-align: left; /* Align text to the left */
 }
 
-.card.selected {
-    background-color: lightgreen; /* Highlight selected card */
-}
-
-.quantity-input {
-    background-color: white;
-    position: relative;
-    z-index: 1;
-}
-
-.quantity-container {
-    text-align: center;
-    font-size: 0.8em;
-}
-
 #galleryContainer {
     position: relative;
     text-align: left;
